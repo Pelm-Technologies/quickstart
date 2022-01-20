@@ -11,18 +11,10 @@ import { Config } from "pelm-connect";
 
 import { CLIENT_ID, CLIENT_SECRET, USER_ID } from "./constants";
 
-// // TODO: fill in your client_id and client_secret here
-// const CLIENT_ID = '1f1ae19e-78c6-11ec-b93c-d6e51c4bd11c'
-// const CLIENT_SECRET = 'a354dacc68408452b0bf108bc30efb56559d125d0adaa5b650573320c541cdd2'
-
-type Props = {
-
-}
 
 type State = {
     isLoading: boolean;
     connectToken?: string;
-    isConnectSuccesful: boolean;
     accessToken?: string;
 }
 
@@ -34,16 +26,12 @@ export class App extends React.Component<{}, State> {
         this.state = {
             isLoading: true,
             connectToken: undefined,
-            // accessToken: undefined,
-            accessToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJhdXRoLXNlcnZlciIsImV4cCI6MTY0MjY0NDI4MC4xNjgxMDQ0LCJ1c2VyIjoiOCJ9.WaPVOlMO8lMA61MimQT5S620mbwIdwwgDhkQO01sJ8ldfnkK0UJ6hK4nYnNAkkBIR2nUwhrNyDVnXFZOu9owY3oLz2JD1LAQo1kl0T2K01hu15OYRUjOaPfUU7Q0w4FEHJP9W_-9rMlzejQgeqcIBXRKQvzbjvIoUANUBVd1XqLIx317rXrc_ewB9-mT8SMC3hg_-kidxroKTU58-bP7q7P2UX1FniaPE46Y6nT4PGiQI9uowY_c0BUr0Zjp9jco5kAWZpz21TQMu54ZQ8nDQv1cKYglF8Bjfu1sr7_kI0Th4Twa27RyYA50BVGgbdZZ1dGXy_mfQ5rAIa7OXrOoRQ",
-
-            isConnectSuccesful: false,
+            accessToken: undefined,
+            // accessToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJhdXRoLXNlcnZlciIsImV4cCI6MTY0MjY0NDI4MC4xNjgxMDQ0LCJ1c2VyIjoiOCJ9.WaPVOlMO8lMA61MimQT5S620mbwIdwwgDhkQO01sJ8ldfnkK0UJ6hK4nYnNAkkBIR2nUwhrNyDVnXFZOu9owY3oLz2JD1LAQo1kl0T2K01hu15OYRUjOaPfUU7Q0w4FEHJP9W_-9rMlzejQgeqcIBXRKQvzbjvIoUANUBVd1XqLIx317rXrc_ewB9-mT8SMC3hg_-kidxroKTU58-bP7q7P2UX1FniaPE46Y6nT4PGiQI9uowY_c0BUr0Zjp9jco5kAWZpz21TQMu54ZQ8nDQv1cKYglF8Bjfu1sr7_kI0Th4Twa27RyYA50BVGgbdZZ1dGXy_mfQ5rAIa7OXrOoRQ",
         }
     }
 
     componentDidMount(): void {
-        console.log("mounting app")
-
         this.generateConnectToken()
     }
 
@@ -145,15 +133,7 @@ export class App extends React.Component<{}, State> {
     }
 
     onSuccess = (authorizationCode: string) => {
-        console.log("authorizationCode")
-        console.log(authorizationCode)
-
-
         this.generateAccessToken(authorizationCode)
-
-        // this.setState({
-        //     isConnectSuccesful: true
-        // })
     }
 
     onExit = () => {
