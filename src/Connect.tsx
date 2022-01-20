@@ -10,15 +10,6 @@ type Props = {
 }
 
 const Connect = (props: Props) => {
-
-    const onSuccess =
-        () => {
-            console.log("onSuccess from App")
-        };
-
-    const onExit =
-        () => console.log('onExit from App.js');
-
     const config = {
         token: props.connectToken,
         onSuccess: props.onSuccess,
@@ -27,15 +18,21 @@ const Connect = (props: Props) => {
 
     const { open, ready, error } = useConnect(config);
 
-    return <button
-        type="button"
-        className="button"
-        onClick={() => open()}
-        // disabled={!ready || error}
-        disabled={!ready}
-    >
-        Connect your utility
-    </button>
+    return (
+        <>
+            <div className='modal-overlay'>test testests</div>
+            <button
+                type="button"
+                className="button"
+                onClick={() => open()}
+                // disabled={!ready || error}
+                disabled={!ready}
+            >
+                Connect your utility
+            </button>
+        </>
+        
+    )
 }
 
 export default Connect

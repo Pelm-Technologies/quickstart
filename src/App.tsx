@@ -53,25 +53,33 @@ export class App extends React.Component<{}, State> {
 
         fetch('https://api.pelm.com/auth/connect-token', requestOptions)
             .then(response => {
-                console.log("response")
-                console.log(response)
                 if (response.ok) {
                     return response.json();
                 } else {
-                    console.log("error")
-                    throw new Error('Something went wrong ...');
+                    return response.text().then(text => { throw new Error(text) })
                 }
-            }, function (error) {
-                console.log("poop")
-                console.log(error.message)
             })
-            .then(data => {
-                console.log("data: ")
+            .then((data) => {
+                console.log("success")
                 console.log(data)
+
                 this.setState({
                     isLoading: false,
                     connectToken: data['connect_token']
                 })
+            })
+            .catch((error: Error) => {
+                console.log(error)
+                console.log(error.name)
+                console.log(error.message)
+
+                try {
+                    const errorObject = JSON.parse(error.message);
+                    console.log(errorObject)
+
+                } catch(e) {
+                    console.log("other")
+                }
             });
     }
 
