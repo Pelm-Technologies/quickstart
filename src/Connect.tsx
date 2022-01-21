@@ -1,8 +1,5 @@
 import { useConnect } from 'pelm-connect';
 
-import { Config } from "pelm-connect/dist/types/index";
-
-
 type Props = {
     connectToken: string;
     onSuccess: (authorizationCode: string) => void;
@@ -20,10 +17,10 @@ const Connect = (props: Props) => {
 
     return (
         <>
-            <div className='modal-overlay'>test testests</div>
+            {/* <div className='modal-overlay'>test testests</div> */}
             <button
                 type="button"
-                className="button"
+                // className="button"
                 onClick={() => open()}
                 // disabled={!ready || error}
                 disabled={!ready}

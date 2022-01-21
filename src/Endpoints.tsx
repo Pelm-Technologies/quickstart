@@ -9,6 +9,7 @@ type Props = {
 type State = {
     accountIds?: string[];
     intervalData?: any;
+    inputtedAccountId: string;
 }
 
 export class Endpoints extends React.Component<Props, State> {
@@ -17,7 +18,8 @@ export class Endpoints extends React.Component<Props, State> {
         super(props)
         this.state = {
             accountIds: undefined,
-            intervalData: undefined
+            intervalData: undefined,
+            inputtedAccountId: "",
         }
     }
 
@@ -67,6 +69,10 @@ export class Endpoints extends React.Component<Props, State> {
     }
 
     fetchIntervals = () => {
+        this.setState({
+            intervalData: undefined
+        })
+
         const accessToken = this.props.accessToken
         const headers = new Headers();
         headers.set('Authorization', 'Bearer ' + accessToken);
@@ -78,7 +84,8 @@ export class Endpoints extends React.Component<Props, State> {
             headers
         };
 
-        const url = 'https://api.pelm.com/accounts/' + this.state.accountIds![0] + '/intervals'
+        // const url = 'https://api.pelm.com/accounts/' + this.state.accountIds![0] + '/intervals'
+        const url = 'https://api.pelm.com/accounts/' + this.state.inputtedAccountId + '/intervals'
 
         fetch(url, requestOptions)
             .then(response => {
@@ -174,10 +181,27 @@ export class Endpoints extends React.Component<Props, State> {
         )
     }
 
+    onAccountIdChange = (event: { target: any; }) => {
+        const target = event.target;
+        const value = target.value;
+
+        this.setState({
+            inputtedAccountId: value
+        })
+    }
+
     renderIntervalsEndpoints() {
         return (
             <div>
                 <div>Click this button to make a GET request to /accounts/:account_id/intervals</div>
+                <input
+                    id="accountId"
+                    name="accoundId"
+                    type="text"
+                    value={this.state.inputtedAccountId}
+                    onChange={this.onAccountIdChange}
+                    placeholder="Enter Account Id"
+                />
                 <button onClick={this.fetchIntervals}>click me</button>
                 {this.maybeRenderIntervalsResponse()}
             </div>
@@ -187,7 +211,10 @@ export class Endpoints extends React.Component<Props, State> {
     render() {
         return (
             <div>
+                <br/>
                 {this.renderAccountsEndpoint()}
+                <br/>
+                <br/>
                 {this.renderIntervalsEndpoints()}
             </div>
         )

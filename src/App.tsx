@@ -1,13 +1,9 @@
 import * as React from "react";
-import { useCallback } from "react";
-import * as ReactModal from 'react-modal';
 
 import { useConnect } from 'pelm-connect';
 
 import Connect from './Connect'
 import { Endpoints } from "./Endpoints";
-
-import { Config } from "pelm-connect";
 
 import { CLIENT_ID, CLIENT_SECRET, USER_ID } from "./constants";
 
@@ -27,7 +23,7 @@ export class App extends React.Component<{}, State> {
             isLoading: true,
             connectToken: undefined,
             accessToken: undefined,
-            // accessToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJhdXRoLXNlcnZlciIsImV4cCI6MTY0MjY0NDI4MC4xNjgxMDQ0LCJ1c2VyIjoiOCJ9.WaPVOlMO8lMA61MimQT5S620mbwIdwwgDhkQO01sJ8ldfnkK0UJ6hK4nYnNAkkBIR2nUwhrNyDVnXFZOu9owY3oLz2JD1LAQo1kl0T2K01hu15OYRUjOaPfUU7Q0w4FEHJP9W_-9rMlzejQgeqcIBXRKQvzbjvIoUANUBVd1XqLIx317rXrc_ewB9-mT8SMC3hg_-kidxroKTU58-bP7q7P2UX1FniaPE46Y6nT4PGiQI9uowY_c0BUr0Zjp9jco5kAWZpz21TQMu54ZQ8nDQv1cKYglF8Bjfu1sr7_kI0Th4Twa27RyYA50BVGgbdZZ1dGXy_mfQ5rAIa7OXrOoRQ",
+            // accessToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJhd…kGyCRjNZsI17kAlEdqNK7dAJbwoRwbnT3NSIJjg6W35-EvAkg",
         }
     }
 
