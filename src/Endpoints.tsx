@@ -1,4 +1,5 @@
 import * as React from "react";
+import styled from 'styled-components';
 
 import {CLIENT_ID, CLIENT_SECRET, USER_ID} from './constants'
 
@@ -11,6 +12,18 @@ type State = {
     intervalData?: any;
     inputtedAccountId: string;
 }
+
+const Outer = styled.div`
+    display: flex;
+    justify-content: center;
+
+`
+
+const Container = styled.div`
+    width: 800px;
+    
+
+`
 
 export class Endpoints extends React.Component<Props, State> {
 
@@ -133,8 +146,8 @@ export class Endpoints extends React.Component<Props, State> {
     renderAccountsEndpoint() {
         return (
             <div>
-                <div>Click this button to make a GET request to /users/:user_id/accounts</div>
-                <button onClick={this.fetchAccounts}>click me</button>
+                <div>Click this button to make a GET request to <code>/users/:user_id/accounts</code></div>
+                <button onClick={this.fetchAccounts}>Submit</button>
                 {this.maybeRenderAccountsResponse()}
             </div>
         )
@@ -165,18 +178,13 @@ export class Endpoints extends React.Component<Props, State> {
             <div>
                 This is the response:
                 <div>
-                    unit:
-                    {data['unit']}
+                    <pre>
+                        {JSON.stringify(data, null, 2)}
+
+                    </pre>
+                    
                 </div>
-                <div>
-                    utility:
-                    {data['utility']}
-                </div>
-                <div>
-                    intervals:
-                    {/* {data['intervals']} */}
-                    {this.renderIntervals(data['intervals'])}
-                </div>
+                
             </div>
         )
     }
@@ -193,7 +201,7 @@ export class Endpoints extends React.Component<Props, State> {
     renderIntervalsEndpoints() {
         return (
             <div>
-                <div>Click this button to make a GET request to /accounts/:account_id/intervals</div>
+                <div>Click this button to make a GET request to <code>/accounts/:account_id/intervals</code></div>
                 <input
                     id="accountId"
                     name="accoundId"
@@ -202,7 +210,7 @@ export class Endpoints extends React.Component<Props, State> {
                     onChange={this.onAccountIdChange}
                     placeholder="Enter Account Id"
                 />
-                <button onClick={this.fetchIntervals}>click me</button>
+                <button onClick={this.fetchIntervals}>Submit</button>
                 {this.maybeRenderIntervalsResponse()}
             </div>
         )
@@ -210,14 +218,37 @@ export class Endpoints extends React.Component<Props, State> {
 
     render() {
         return (
-            <div>
-                <br/>
-                {this.renderAccountsEndpoint()}
-                <br/>
-                <br/>
-                {this.renderIntervalsEndpoints()}
-            </div>
+            <Outer>
+                <Container>
+                    <br/>
+                    {this.renderAccountsEndpoint()}
+                    <br/>
+                    <br/>
+                    {this.renderIntervalsEndpoints()}
+
+
+                </Container>
+
+            </Outer>
+            
+            // <div>
+                
+            // </div>
         )
     }
 
 }
+
+// {/* <div>
+//                     unit:
+//                     {data['unit']}
+//                 </div>
+//                 <div>
+//                     utility:
+//                     {data['utility']}
+//                 </div>
+//                 <div>
+//                     intervals:
+//                     {/* {data['intervals']} */}
+//                 //     {this.renderIntervals(data['intervals'])}
+//                 // </div> */}

@@ -1,9 +1,8 @@
 import * as React from "react";
 
-import { useConnect } from 'pelm-connect';
-
-import Connect from './Connect'
 import { Endpoints } from "./Endpoints";
+
+import { ConnectButton, Config } from "pelm-connect";
 
 import { CLIENT_ID, CLIENT_SECRET, USER_ID } from "./constants";
 
@@ -23,7 +22,6 @@ export class App extends React.Component<{}, State> {
             isLoading: true,
             connectToken: undefined,
             accessToken: undefined,
-            // accessToken: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJhd…kGyCRjNZsI17kAlEdqNK7dAJbwoRwbnT3NSIJjg6W35-EvAkg",
         }
     }
 
@@ -87,8 +85,6 @@ export class App extends React.Component<{}, State> {
         3. use the access_token to make requests for a given user's energy data
     */
     generateAccessToken(authorizationCode: string) {
-        console.log("generating access token")
-
         this.setState({ isLoading: true })
 
         const headers = new Headers();
@@ -151,9 +147,15 @@ export class App extends React.Component<{}, State> {
             return "Loading"
         }
 
+        const config: Config = {
+            connectToken: this.state.connectToken!,
+            onSuccess: this.onSuccess,
+            onExit: this.onExit
+        }
+
         return this.state.accessToken
             ? <Endpoints accessToken={this.state.accessToken!} />
-            : <Connect connectToken={this.state.connectToken!} onSuccess={this.onSuccess} onExit={this.onExit} />
+            : <ConnectButton config={config} />
     }
 
 }
