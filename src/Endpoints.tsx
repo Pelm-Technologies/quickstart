@@ -21,12 +21,9 @@ const Outer = styled.div`
 
 const Container = styled.div`
     width: 800px;
-    
-
 `
 
 export class Endpoints extends React.Component<Props, State> {
-
     constructor(props: Props) {
         super(props)
         this.state = {
@@ -59,24 +56,17 @@ export class Endpoints extends React.Component<Props, State> {
                 }
             })
             .then((data) => {
-                console.log("success")
-                console.log(data)
-
                 this.setState({
                     accountIds: data['account_ids']
                 })
             })
             .catch((error: Error) => {
-                console.log(error)
-                console.log(error.name)
-                console.log(error.message)
-
                 try {
                     const errorObject = JSON.parse(error.message);
                     console.log(errorObject)
 
                 } catch(e) {
-                    console.log("other")
+                    console.log("an error occurred")
                 }
             });
     }
@@ -97,7 +87,6 @@ export class Endpoints extends React.Component<Props, State> {
             headers
         };
 
-        // const url = 'https://api.pelm.com/accounts/' + this.state.accountIds![0] + '/intervals'
         const url = 'https://api.pelm.com/accounts/' + this.state.inputtedAccountId + '/intervals'
 
         fetch(url, requestOptions)
@@ -109,23 +98,17 @@ export class Endpoints extends React.Component<Props, State> {
                 }
             })
             .then((data) => {
-                console.log("success")
-                console.log(data)
                 this.setState({
                     intervalData: data
                 })
             })
             .catch((error: Error) => {
-                console.log(error)
-                console.log(error.name)
-                console.log(error.message)
-
                 try {
                     const errorObject = JSON.parse(error.message);
                     console.log(errorObject)
 
                 } catch(e) {
-                    console.log("other")
+                    console.log("an error occurred")
                 }
             });
     }
@@ -153,20 +136,6 @@ export class Endpoints extends React.Component<Props, State> {
         )
     }
 
-    renderIntervals(intervals: number[][]) {
-        // const temp = intervals.forEach((interval: number[]) => {
-        //     return "time: " + interval[0] + ", usage: " + interval[1]
-        // })
-
-        return <div>
-            {
-                intervals.map((interval, _) => {
-                    return "(time: " + interval[0] + ", usage: " + interval[1] + ") "
-                })
-            }
-        </div>
-    }
-
     maybeRenderIntervalsResponse() {
         if (this.state.intervalData === undefined) {
             return null;
@@ -180,11 +149,8 @@ export class Endpoints extends React.Component<Props, State> {
                 <div>
                     <pre>
                         {JSON.stringify(data, null, 2)}
-
                     </pre>
-                    
                 </div>
-                
             </div>
         )
     }
@@ -225,30 +191,9 @@ export class Endpoints extends React.Component<Props, State> {
                     <br/>
                     <br/>
                     {this.renderIntervalsEndpoints()}
-
-
                 </Container>
-
             </Outer>
-            
-            // <div>
-                
-            // </div>
         )
     }
 
 }
-
-// {/* <div>
-//                     unit:
-//                     {data['unit']}
-//                 </div>
-//                 <div>
-//                     utility:
-//                     {data['utility']}
-//                 </div>
-//                 <div>
-//                     intervals:
-//                     {/* {data['intervals']} */}
-//                 //     {this.renderIntervals(data['intervals'])}
-//                 // </div> */}

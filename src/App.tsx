@@ -29,6 +29,10 @@ export class App extends React.Component<{}, State> {
         this.generateConnectToken()
     }
 
+    /*
+        We're requeseting the connect_token here for simplicity.
+        In an ideal world, you would make this request from your server and then pass the token to your client.
+    */
     generateConnectToken() {
         this.setState({ isLoading: true })
 
@@ -54,25 +58,17 @@ export class App extends React.Component<{}, State> {
                 }
             })
             .then((data) => {
-                console.log("success")
-                console.log(data)
-
                 this.setState({
                     isLoading: false,
                     connectToken: data['connect_token']
                 })
             })
             .catch((error: Error) => {
-                console.log(error)
-                console.log(error.name)
-                console.log(error.message)
-
                 try {
                     const errorObject = JSON.parse(error.message);
                     console.log(errorObject)
-
                 } catch(e) {
-                    console.log("other")
+                    console.log("an error occurred")
                 }
             });
     }
@@ -109,25 +105,17 @@ export class App extends React.Component<{}, State> {
                 }
             })
             .then((data) => {
-                console.log("success")
-                console.log(data)
-
                 this.setState({
                     isLoading: false,
                     accessToken: data['access_token']
                 })
             })
             .catch((error: Error) => {
-                console.log(error)
-                console.log(error.name)
-                console.log(error.message)
-
                 try {
                     const errorObject = JSON.parse(error.message);
                     console.log(errorObject)
-
                 } catch(e) {
-                    console.log("other")
+                    console.log("an error occurred")
                 }
             });
     }
@@ -141,8 +129,6 @@ export class App extends React.Component<{}, State> {
     }
 
     render(): React.ReactNode {
-        console.log(this.state)
-
         if (this.state.isLoading) {
             return "Loading"
         }
