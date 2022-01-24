@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from 'styled-components';
 
-import {CLIENT_ID, CLIENT_SECRET, USER_ID} from './constants'
+import {CLIENT_ID, CLIENT_SECRET, USER_ID, ENVIRONMENT} from './constants'
 
 type Props = {
     accessToken: string;
@@ -36,6 +36,7 @@ export class Endpoints extends React.Component<Props, State> {
     fetchAccounts = () => {
         const accessToken = this.props.accessToken
         const headers = new Headers();
+        headers.set('Environment', ENVIRONMENT);
         headers.set('Authorization', 'Bearer ' + accessToken);
         headers.set('client_id', CLIENT_ID);
         headers.set('client_secret', CLIENT_SECRET);
@@ -78,6 +79,7 @@ export class Endpoints extends React.Component<Props, State> {
 
         const accessToken = this.props.accessToken
         const headers = new Headers();
+        headers.set('Environment', ENVIRONMENT);
         headers.set('Authorization', 'Bearer ' + accessToken);
         headers.set('client_id', CLIENT_ID);
         headers.set('client_secret', CLIENT_SECRET);

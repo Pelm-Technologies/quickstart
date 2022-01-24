@@ -4,7 +4,7 @@ import { Endpoints } from "./Endpoints";
 
 import { ConnectButton, Config } from "pelm-connect";
 
-import { CLIENT_ID, CLIENT_SECRET, USER_ID } from "./constants";
+import { CLIENT_ID, CLIENT_SECRET, USER_ID, ENVIRONMENT } from "./constants";
 
 
 type State = {
@@ -37,6 +37,7 @@ export class App extends React.Component<{}, State> {
         this.setState({ isLoading: true })
 
         const headers = new Headers();
+        headers.set('Environment', ENVIRONMENT);
         headers.set('client_id', CLIENT_ID);
         headers.set('client_secret', CLIENT_SECRET);
 
@@ -84,6 +85,8 @@ export class App extends React.Component<{}, State> {
         this.setState({ isLoading: true })
 
         const headers = new Headers();
+
+        headers.set('Environment', ENVIRONMENT);
         headers.set('Authorization', 'Basic ' + btoa(CLIENT_ID + ":" + CLIENT_SECRET));
 
         const data = new FormData();
@@ -136,12 +139,12 @@ export class App extends React.Component<{}, State> {
         const config: Config = {
             connectToken: this.state.connectToken!,
             onSuccess: this.onSuccess,
-            onExit: this.onExit
+            onExit: this.onExit,
+            environment: ENVIRONMENT,
         }
 
         return this.state.accessToken
             ? <Endpoints accessToken={this.state.accessToken!} />
             : <ConnectButton config={config} />
     }
-
 }
