@@ -1,4 +1,4 @@
-# Plaid quickstart
+# Pelm quickstart
 
 This repository accompanies Pelm's [**quickstart guide**](https://pelm.readme.io/reference/example-app).
 
