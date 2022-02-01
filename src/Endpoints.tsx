@@ -8,9 +8,13 @@ type Props = {
 }
 
 type State = {
-    accountIds?: string[];
+    accountsData?: string;
     intervalData?: any;
-    inputtedAccountId: string;
+    billsData?: any;
+    billDetailsData?: any;
+    intervalsAccountIdInput: string;
+    billsAccountIdInput: string;
+    billIdInput: string;
 }
 
 const Outer = styled.div`
@@ -27,9 +31,13 @@ export class Endpoints extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props)
         this.state = {
-            accountIds: undefined,
+            accountsData: undefined,
             intervalData: undefined,
-            inputtedAccountId: "",
+            billDetailsData: undefined,
+            billsData: undefined,
+            intervalsAccountIdInput: "",
+            billsAccountIdInput: "",
+            billIdInput: "",
         }
     }
 
@@ -57,8 +65,9 @@ export class Endpoints extends React.Component<Props, State> {
                 }
             })
             .then((data) => {
+                console.log(data);
                 this.setState({
-                    accountIds: data['account_ids']
+                    accountsData: JSON.stringify(data, null, 2)
                 })
             })
             .catch((error: Error) => {
@@ -89,7 +98,7 @@ export class Endpoints extends React.Component<Props, State> {
             headers
         };
 
-        const url = 'https://api.pelm.com/accounts/' + this.state.inputtedAccountId + '/intervals'
+        const url = 'https://api.pelm.com/accounts/' + this.state.intervalsAccountIdInput + '/intervals'
 
         fetch(url, requestOptions)
             .then(response => {
@@ -115,15 +124,107 @@ export class Endpoints extends React.Component<Props, State> {
             });
     }
 
+    fetchBills = () => {
+        this.setState({
+            billsData: undefined
+        })
+
+        const accessToken = this.props.accessToken
+        const headers = new Headers();
+        headers.set('Environment', ENVIRONMENT);
+        headers.set('Authorization', 'Bearer ' + accessToken);
+        headers.set('client_id', CLIENT_ID);
+        headers.set('client_secret', CLIENT_SECRET);
+
+        const requestOptions = {
+            method: 'GET',
+            headers
+        };
+
+        const url = 'https://api.pelm.com/accounts/' + this.state.billsAccountIdInput + '/bills'
+
+        fetch(url, requestOptions)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.text().then(text => { throw new Error(text) })
+                }
+            })
+            .then((data) => {
+                this.setState({
+                    billsData: data
+                })
+            })
+            .catch((error: Error) => {
+                try {
+                    const errorObject = JSON.parse(error.message);
+                    console.log(errorObject)
+
+                } catch(e) {
+                    console.log("an error occurred")
+                }
+            });
+    }
+
+    fetchBillDetails = () => {
+        this.setState({
+            billDetailsData: undefined
+        })
+
+        const accessToken = this.props.accessToken
+        const headers = new Headers();
+        headers.set('Environment', ENVIRONMENT);
+        headers.set('Authorization', 'Bearer ' + accessToken);
+        headers.set('client_id', CLIENT_ID);
+        headers.set('client_secret', CLIENT_SECRET);
+
+        const requestOptions = {
+            method: 'GET',
+            headers
+        };
+
+        const url = 'https://api.pelm.com/bills/' + this.state.billIdInput
+
+        fetch(url, requestOptions)
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.text().then(text => { throw new Error(text) })
+                }
+            })
+            .then((data) => {
+                this.setState({
+                    billDetailsData: data
+                })
+            })
+            .catch((error: Error) => {
+                try {
+                    const errorObject = JSON.parse(error.message);
+                    console.log(errorObject)
+
+                } catch(e) {
+                    console.log("an error occurred")
+                }
+            });
+    }
+
     maybeRenderAccountsResponse() {
-        if (this.state.accountIds === undefined) {
+        if (this.state.accountsData === undefined) {
             return null;
         }
+
+        const data = this.state.accountsData
 
         return (
             <div>
                 This is the response:
-                {this.state.accountIds}
+                <div>
+                    <pre>
+                        {data}
+                    </pre>
+                </div>
             </div>
         )
     }
@@ -157,12 +258,50 @@ export class Endpoints extends React.Component<Props, State> {
         )
     }
 
-    onAccountIdChange = (event: { target: any; }) => {
+    maybeRenderAccountBillsResponse() {
+        if (this.state.billsData === undefined) {
+            return null;
+        }
+
+        const data = this.state.billsData
+
+        return (
+            <div>
+                This is the response:
+                <div>
+                    <pre>
+                        {JSON.stringify(data, null, 2)}
+                    </pre>
+                </div>
+            </div>
+        )
+    }
+
+    maybeRenderBillDetailsResponse() {
+        if (this.state.billDetailsData === undefined) {
+            return null;
+        }
+
+        const data = this.state.billDetailsData
+
+        return (
+            <div>
+                This is the response:
+                <div>
+                    <pre>
+                        {JSON.stringify(data, null, 2)}
+                    </pre>
+                </div>
+            </div>
+        )
+    }
+
+    onIntervalsInputChange = (event: { target: any; }) => {
         const target = event.target;
         const value = target.value;
 
         this.setState({
-            inputtedAccountId: value
+            intervalsAccountIdInput: value
         })
     }
 
@@ -174,12 +313,66 @@ export class Endpoints extends React.Component<Props, State> {
                     id="accountId"
                     name="accoundId"
                     type="text"
-                    value={this.state.inputtedAccountId}
-                    onChange={this.onAccountIdChange}
+                    value={this.state.intervalsAccountIdInput}
+                    onChange={this.onIntervalsInputChange}
                     placeholder="Enter Account Id"
                 />
                 <button onClick={this.fetchIntervals}>Submit</button>
                 {this.maybeRenderIntervalsResponse()}
+            </div>
+        )
+    }
+
+    onBillsInputChange = (event: { target: any; }) => {
+        const target = event.target;
+        const value = target.value;
+
+        this.setState({
+            billsAccountIdInput: value
+        })
+    }
+
+    renderAccountBillsEndpoint() {
+        return (
+            <div>
+                <div>Click this button to make a GET request to <code>/accounts/:account_id/bills</code></div>
+                <input
+                    id="accountId"
+                    name="accoundId"
+                    type="text"
+                    value={this.state.billsAccountIdInput}
+                    onChange={this.onBillsInputChange}
+                    placeholder="Enter Account Id"
+                />
+                <button onClick={this.fetchBills}>Submit</button>
+                {this.maybeRenderAccountBillsResponse()}
+            </div>
+        )
+    }
+
+    onBillIdInputChange = (event: { target: any; }) => {
+        const target = event.target;
+        const value = target.value;
+
+        this.setState({
+            billIdInput: value
+        })
+    }
+
+    renderBillDetailsEndpoint() {
+        return (
+            <div>
+                <div>Click this button to make a GET request to <code>/bills/:bill_id</code></div>
+                <input
+                    id="billId"
+                    name="billId"
+                    type="text"
+                    value={this.state.billIdInput}
+                    onChange={this.onBillIdInputChange}
+                    placeholder="Enter Bill Id"
+                />
+                <button onClick={this.fetchBillDetails}>Submit</button>
+                {this.maybeRenderBillDetailsResponse()}
             </div>
         )
     }
@@ -193,6 +386,12 @@ export class Endpoints extends React.Component<Props, State> {
                     <br/>
                     <br/>
                     {this.renderIntervalsEndpoints()}
+                    <br/>
+                    <br/>
+                    {this.renderAccountBillsEndpoint()}
+                    <br/>
+                    <br/>
+                    {this.renderBillDetailsEndpoint()}
                 </Container>
             </Outer>
         )
