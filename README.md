@@ -2,13 +2,18 @@
 
 This repository accompanies Pelm's [**quickstart guide**](https://pelm.readme.io/reference/example-app).
 
-## 1. Clone the repository
+## 1. Configuration
 
-Using https:
+Clone the repository
 
 ```bash
 git clone https://github.com/Pelm-Technologies/quickstart.git
 cd quickstart
+```
+
+Install dependencies
+```bash
+npm install
 ```
 
 ## 2. Fill our your variables in constants.ts
