@@ -13,6 +13,8 @@ type State = {
     billsData?: any;
     billDetailsData?: any;
     intervalsAccountIdInput: string;
+    intervalsStartDate: string;
+    intervalsEndDate: string;
     billsAccountIdInput: string;
     billIdInput: string;
 }
@@ -36,6 +38,8 @@ export class Endpoints extends React.Component<Props, State> {
             billDetailsData: undefined,
             billsData: undefined,
             intervalsAccountIdInput: "",
+            intervalsStartDate: "",
+            intervalsEndDate: "",
             billsAccountIdInput: "",
             billIdInput: "",
         }
@@ -98,7 +102,7 @@ export class Endpoints extends React.Component<Props, State> {
             headers
         };
 
-        const url = 'https://api.pelm.com/accounts/' + this.state.intervalsAccountIdInput + '/intervals'
+        const url = 'https://api.pelm.com/accounts/' + this.state.intervalsAccountIdInput + '/intervals?start_date=' + this.state.intervalsStartDate + '&end_date=' + this.state.intervalsEndDate
 
         fetch(url, requestOptions)
             .then(response => {
@@ -305,6 +309,24 @@ export class Endpoints extends React.Component<Props, State> {
         })
     }
 
+    onIntervalsStartDateChange = (event: { target: any; }) => {
+        const target = event.target;
+        const value = target.value;
+
+        this.setState({
+            intervalsStartDate: value
+        })
+    }
+
+    onIntervalsEndDateChange = (event: { target: any; }) => {
+        const target = event.target;
+        const value = target.value;
+
+        this.setState({
+            intervalsEndDate: value
+        })
+    }
+
     renderIntervalsEndpoints() {
         return (
             <div>
@@ -316,6 +338,22 @@ export class Endpoints extends React.Component<Props, State> {
                     value={this.state.intervalsAccountIdInput}
                     onChange={this.onIntervalsInputChange}
                     placeholder="Enter Account Id"
+                />
+                <input
+                    id="startDate"
+                    name="startDate"
+                    type="text"
+                    value={this.state.intervalsStartDate}
+                    onChange={this.onIntervalsStartDateChange}
+                    placeholder="Enter Start Date"
+                />
+                <input
+                    id="endDate"
+                    name="endDate"
+                    type="text"
+                    value={this.state.intervalsEndDate}
+                    onChange={this.onIntervalsEndDateChange}
+                    placeholder="Enter End Date"
                 />
                 <button onClick={this.fetchIntervals}>Submit</button>
                 {this.maybeRenderIntervalsResponse()}
