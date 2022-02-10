@@ -87,7 +87,8 @@ export class App extends React.Component<{}, State> {
         const headers = new Headers();
 
         headers.set('Environment', ENVIRONMENT);
-        headers.set('Authorization', 'Basic ' + btoa(CLIENT_ID + ":" + CLIENT_SECRET));
+        headers.set('client_id', CLIENT_ID);
+        headers.set('client_secret', CLIENT_SECRET);
 
         const data = new FormData();
         data.append('grant_type', 'code')
