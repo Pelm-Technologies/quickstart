@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Endpoints } from "./Endpoints";
 
-import { ConnectButton, Config } from "pelm-connect";
+import { ConnectButton, Config } from "react-pelm-connect";
 
 import { CLIENT_ID, CLIENT_SECRET, USER_ID, ENVIRONMENT } from "./constants";
 
