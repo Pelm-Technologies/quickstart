@@ -9,6 +9,7 @@ import { CLIENT_ID, CLIENT_SECRET, USER_ID, ENVIRONMENT } from "./constants";
 
 type State = {
     isLoading: boolean;
+    error?: string;
     connectToken?: string;
     accessToken?: string;
 }
@@ -20,6 +21,7 @@ export class App extends React.Component<{}, State> {
 
         this.state = {
             isLoading: true,
+            error: undefined,
             connectToken: undefined,
             accessToken: undefined,
         }
@@ -66,6 +68,10 @@ export class App extends React.Component<{}, State> {
             })
             .catch((error: Error) => {
                 try {
+                    this.setState({
+                        isLoading: false,
+                        error: error.message
+                    })
                     const errorObject = JSON.parse(error.message);
                     console.log(errorObject)
                 } catch(e) {
@@ -116,6 +122,10 @@ export class App extends React.Component<{}, State> {
             })
             .catch((error: Error) => {
                 try {
+                    this.setState({
+                        isLoading: false,
+                        error: error.message
+                    })
                     const errorObject = JSON.parse(error.message);
                     console.log(errorObject)
                 } catch(e) {
@@ -135,6 +145,10 @@ export class App extends React.Component<{}, State> {
     render(): React.ReactNode {
         if (this.state.isLoading) {
             return "Loading"
+        }
+
+        if (this.state.error) {
+            return "Error: " + this.state.error
         }
 
         const config: Config = {
