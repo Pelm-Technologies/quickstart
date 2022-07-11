@@ -104,8 +104,6 @@ export class Endpoints extends React.Component<Props, State> {
             headers
         };
 
-        // const url = 'https://api.pelm.com/accounts/' + this.state.intervalsAccountIdInput + '/intervals?start_date=' + this.state.intervalsStartDate + '&end_date=' + this.state.intervalsEndDate
-
         const url = 'https://api.pelm.com/intervals?' + new URLSearchParams({
             account_id: this.state.intervalsAccountIdInput,
             type: this.state.intervalsType,
