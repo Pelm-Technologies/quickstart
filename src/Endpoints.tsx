@@ -15,6 +15,7 @@ type State = {
     intervalsAccountIdInput: string;
     intervalsStartDate: string;
     intervalsEndDate: string;
+    intervalsType: string;
     billsAccountIdInput: string;
     billIdInput: string;
 }
@@ -40,6 +41,7 @@ export class Endpoints extends React.Component<Props, State> {
             intervalsAccountIdInput: "",
             intervalsStartDate: "",
             intervalsEndDate: "",
+            intervalsType: "ELECTRIC",
             billsAccountIdInput: "",
             billIdInput: "",
         }
@@ -58,7 +60,7 @@ export class Endpoints extends React.Component<Props, State> {
             headers
         };
 
-        const url = 'https://api.pelm.com/users/' + USER_ID + '/accounts'
+        const url = 'https://api.pelm.com/accounts'
 
         fetch(url, requestOptions)
             .then(response => {
@@ -102,7 +104,12 @@ export class Endpoints extends React.Component<Props, State> {
             headers
         };
 
-        const url = 'https://api.pelm.com/accounts/' + this.state.intervalsAccountIdInput + '/intervals?start_date=' + this.state.intervalsStartDate + '&end_date=' + this.state.intervalsEndDate
+        const url = 'https://api.pelm.com/intervals?' + new URLSearchParams({
+            account_id: this.state.intervalsAccountIdInput,
+            type: this.state.intervalsType,
+            start_date: this.state.intervalsStartDate,
+            end_date: this.state.intervalsEndDate
+        });
 
         fetch(url, requestOptions)
             .then(response => {
@@ -236,7 +243,7 @@ export class Endpoints extends React.Component<Props, State> {
     renderAccountsEndpoint() {
         return (
             <div>
-                <div>Click this button to make a GET request to <code>/users/:user_id/accounts</code></div>
+                <div>Click this button to make a GET request to <code>/accounts</code></div>
                 <button onClick={this.fetchAccounts}>Submit</button>
                 {this.maybeRenderAccountsResponse()}
             </div>
@@ -327,10 +334,19 @@ export class Endpoints extends React.Component<Props, State> {
         })
     }
 
+    onIntervalsTypeChange = (event: { target: any; }) => {
+        const target = event.target;
+        const value = target.value;
+
+        this.setState({
+            intervalsType: value
+        })
+    }
+
     renderIntervalsEndpoints() {
         return (
             <div>
-                <div>Click this button to make a GET request to <code>/accounts/:account_id/intervals</code></div>
+                <div>Click this button to make a GET request to <code>/intervals</code></div>
                 <input
                     id="accountId"
                     name="accoundId"
@@ -355,6 +371,10 @@ export class Endpoints extends React.Component<Props, State> {
                     onChange={this.onIntervalsEndDateChange}
                     placeholder="Enter End Date"
                 />
+                <select onChange={this.onIntervalsTypeChange}>
+                    <option value="ELECTRIC">ELECTRIC</option>
+                    <option value="GAS">GAS</option>
+                </select>
                 <button onClick={this.fetchIntervals}>Submit</button>
                 {this.maybeRenderIntervalsResponse()}
             </div>
