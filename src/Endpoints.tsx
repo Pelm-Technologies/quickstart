@@ -1,7 +1,7 @@
 import * as React from "react";
 import styled from 'styled-components';
 
-import {CLIENT_ID, CLIENT_SECRET, USER_ID, ENVIRONMENT} from './constants'
+import {PELM_CLIENT_ID, PELM_SECRET, USER_ID, ENVIRONMENT} from './constants'
 
 type Props = {
     accessToken: string;
@@ -52,8 +52,8 @@ export class Endpoints extends React.Component<Props, State> {
         const headers = new Headers();
         headers.set('Environment', ENVIRONMENT);
         headers.set('Authorization', 'Bearer ' + accessToken);
-        headers.set('client_id', CLIENT_ID);
-        headers.set('client_secret', CLIENT_SECRET);
+        headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
+        headers.set('Pelm-Secret', PELM_SECRET);
 
         const requestOptions = {
             method: 'GET',
@@ -96,8 +96,8 @@ export class Endpoints extends React.Component<Props, State> {
         const headers = new Headers();
         headers.set('Environment', ENVIRONMENT);
         headers.set('Authorization', 'Bearer ' + accessToken);
-        headers.set('client_id', CLIENT_ID);
-        headers.set('client_secret', CLIENT_SECRET);
+        headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
+        headers.set('Pelm-Secret', PELM_SECRET);
 
         const requestOptions = {
             method: 'GET',
@@ -144,8 +144,8 @@ export class Endpoints extends React.Component<Props, State> {
         const headers = new Headers();
         headers.set('Environment', ENVIRONMENT);
         headers.set('Authorization', 'Bearer ' + accessToken);
-        headers.set('client_id', CLIENT_ID);
-        headers.set('client_secret', CLIENT_SECRET);
+        headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
+        headers.set('Pelm-Secret', PELM_SECRET);
 
         const requestOptions = {
             method: 'GET',
@@ -187,8 +187,8 @@ export class Endpoints extends React.Component<Props, State> {
         const headers = new Headers();
         headers.set('Environment', ENVIRONMENT);
         headers.set('Authorization', 'Bearer ' + accessToken);
-        headers.set('client_id', CLIENT_ID);
-        headers.set('client_secret', CLIENT_SECRET);
+        headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
+        headers.set('Pelm-Secret', PELM_SECRET);
 
         const requestOptions = {
             method: 'GET',

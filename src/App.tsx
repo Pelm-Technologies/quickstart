@@ -4,7 +4,7 @@ import { Endpoints } from "./Endpoints";
 
 import { ConnectButton, Config } from "react-pelm-connect";
 
-import { CLIENT_ID, CLIENT_SECRET, USER_ID, ENVIRONMENT } from "./constants";
+import { PELM_CLIENT_ID, PELM_SECRET, USER_ID, ENVIRONMENT } from "./constants";
 
 
 type State = {
@@ -40,8 +40,8 @@ export class App extends React.Component<{}, State> {
 
         const headers = new Headers();
         headers.set('Environment', ENVIRONMENT);
-        headers.set('client_id', CLIENT_ID);
-        headers.set('client_secret', CLIENT_SECRET);
+        headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
+        headers.set('Pelm-Secret', PELM_SECRET);
 
         const data = new FormData();
         data.append('user_id', USER_ID)
@@ -93,8 +93,8 @@ export class App extends React.Component<{}, State> {
         const headers = new Headers();
 
         headers.set('Environment', ENVIRONMENT);
-        headers.set('client_id', CLIENT_ID);
-        headers.set('client_secret', CLIENT_SECRET);
+        headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
+        headers.set('Pelm-Secret', PELM_SECRET);
 
         const data = new FormData();
         data.append('grant_type', 'code')
