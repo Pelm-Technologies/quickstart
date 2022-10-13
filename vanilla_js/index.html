@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Pelm Connect Javascript Demo</title>
+        <script src="https://cdn.pelm.com/initialize.js"></script>
+        <script defer>
+            (async () => {
+                // Create a connect token using client credentials in order to initiate the Connect Flow.
+                const generateConnectToken = () => {
+                    return fetch('http://localhost:3001/connect')
+                        .then((r) => r.json())
+                        .then((d) => {
+                            return d.connectToken;
+                        });
+                };
+
+                // Sending request to our backned at the accounts endpoint
+                const generateAccounts = async () => {
+                    const accounts = await fetch('http://localhost:3001/accounts')
+                        .then((r) => r.json())
+                        .then((data) => JSON.stringify(data, null, 2));
+
+                    console.log('ACCOUNTS', accounts);
+
+                    const gettingAccounts = document.getElementById('getting-accounts');
+                    gettingAccounts.hidden = true;
+
+                    const gotAccounts = document.getElementById('got-accounts');
+                    gotAccounts.hidden = false;
+
+                    const accountsList = document.getElementById('accounts-list');
+                    accounts.map((account) => {
+                        let pre = document.createElement('pre');
+
+                        pre.innerHTML = account;
+
+                        accountsList.appendChild(pre);
+                    });
+                };
+
+                // Use the authorizationCode to get an access_token and refresh_token.
+                const generateAccessToken = async (authorizationCode) => {
+                    const res = await fetch('http://localhost:3001/authorization', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ authorizationCode }),
+                    })
+                        .then((r) => r.json())
+                        .then((d) => {
+                            return d;
+                        });
+
+                    if (res) {
+                        const authTokenSuccess = document.getElementById('auth-token-success');
+                        authTokenSuccess.hidden = false;
+                        const gettingAccounts = document.getElementById('getting-accounts');
+                        gettingAccounts.hidden = false;
+                        generateAccounts();
+                    } else {
+                        const authTokenFailure = document.getElementById('auth-token-failure');
+                        authTokenFailure.hidden = false;
+                    }
+                };
+
+                const connectToken = await generateConnectToken();
+                // This is the callback that is called when your User successfully connects their utility account.
+                const onSuccess = (authorizationCode) => {
+                    generateAccessToken(authorizationCode);
+                };
+
+                // This is the callback that is called when Connect is exited but the user has not successfully connected their utility account.
+                const onExit = (status, metadata) => {
+                    console.log(`onExit called with status ${status} and metadata ${metadata}`);
+                };
+
+                // The config is used to specify your Connect Token and callbacks for the success and exit cases.
+                const config = {
+                    connectToken,
+                    onSuccess,
+                    onExit,
+                };
+                const handler = window.PelmConnect.create(config);
+
+                const connectUtilityButton = document.getElementById('connect-utility-button');
+                connectUtilityButton.disabled = false;
+                connectUtilityButton.addEventListener('click', (event) => {
+                    handler.open();
+                });
+            })();
+        </script>
+    </head>
+    <body>
+        <h1>Pelm Connect Javascript Demo</h1>
+        <button id="connect-utility-button" disabled>Connect utility</button>
+        <h2 id="auth-token-success" hidden>Auth Token Successfully Saved To Database</h2>
+        <h2 id="auth-token-failure" hidden>Auth Token Failed To Saved To Database</h2>
+        <h2 id="getting-accounts" hidden>Fetching user Accounts...</h2>
+        <h2 id="got-accounts" hidden>
+            Here are user accounts you can find when using the "https://api.pelm.com/accounts" endpoint:
+        </h2>
+        <ul id="accounts-list"></ul>
+    </body>
+</html>
