@@ -24,6 +24,8 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 
+// Create connect_token
+// Link to Pelm docs: https://docs.pelm.com/reference/post_auth-connect-token
 app.get('/connect', (req, res) => {
 
   const headers = new Headers();
@@ -66,6 +68,8 @@ app.get('/connect', (req, res) => {
 })
 
 
+// Get energy_accouts
+// Link to Pelm docs: https://docs.pelm.com/reference/get_accounts
 app.get('/accounts', (req, res) => {
 
   const accessToken = req.session.access_token
@@ -105,6 +109,8 @@ app.get('/accounts', (req, res) => {
 })
 
 
+// Get energy usage intervals
+// Link to Pelm docs: https://docs.pelm.com/reference/get_intervals
 app.post('/intervals', (req, res) => {
 
   const accessToken = req.session.access_token
@@ -154,6 +160,8 @@ app.post('/intervals', (req, res) => {
 })
 
 
+// Get Bills
+// Link to Pelm docs: https://docs.pelm.com/reference/get_bills
 app.post('/bills', (req, res) => {
 
   const accessToken = req.session.access_token
@@ -195,6 +203,8 @@ app.post('/bills', (req, res) => {
 })
 
 
+// Create access_token
+// Link to Pelm docs: https://docs.pelm.com/reference/post_auth-token-1
 app.post('/authorization', async (req, res) => {
 
   const headers = new Headers();
