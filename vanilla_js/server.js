@@ -4,9 +4,14 @@ import cors from 'cors';
 import fetch, { Headers } from 'node-fetch';
 import dotenv from 'dotenv';
 import session from 'express-session'
+import path, { dirname } from "path";
+import { fileURLToPath } from 'url';
+
 const app = express()
 const port = 3001
 dotenv.config()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Enviornment variables stored in the .env file you created
 const PELM_CLIENT_ID = process.env.PELM_CLIENT_ID
@@ -23,6 +28,11 @@ app.use(
 app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+// Display the inde.html at the servers localhost location
+app.get("/", async (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 
 
 app.get('/connect', (req, res) => {
@@ -247,6 +257,8 @@ app.post('/authorization', async (req, res) => {
 
     });
 })
+
+
 
 
 app.listen(port, () => {

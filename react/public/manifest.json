@@ -1,6 +1,6 @@
 {
-  "short_name": "Pelm Quickstart",
-  "name": "Pelm Quickstart",
+  "short_name": "Pelm React QS",
+  "name": "Pelm React Quickstart",
   "icons": [],
   "start_url": ".",
   "display": "standalone",
