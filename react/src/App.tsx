@@ -12,7 +12,7 @@ type State = {
 };
 
 export class App extends React.Component<{}, State> {
-    constructor(props = {error: undefined}) {
+    constructor(props = { error: undefined }) {
         super(props);
 
         this.state = {
@@ -31,12 +31,14 @@ export class App extends React.Component<{}, State> {
     async generateConnectToken() {
         this.setState({ isLoading: true });
 
-        await fetch('/connect-token')
+        await fetch('/connect-token', { method: 'POST' })
             .then(async (r) => {
                 if (r.ok) {
-                    return r.json()
+                    return r.json();
                 } else {
-                    return r.text().then(t => { throw new Error(t) })
+                    return r.text().then((t) => {
+                        throw new Error(t);
+                    });
                 }
             })
             .then((d) => {
@@ -100,10 +102,6 @@ export class App extends React.Component<{}, State> {
             onExit: this.onExit,
         };
 
-        return this.state.has_access_token ? (
-            <Endpoints error={this.state.error} />
-        ) : (
-            <ConnectButton config={config} />
-        );
+        return this.state.has_access_token ? <Endpoints error={this.state.error} /> : <ConnectButton config={config} />;
     }
 }

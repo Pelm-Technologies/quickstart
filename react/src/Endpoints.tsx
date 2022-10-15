@@ -42,14 +42,13 @@ export class Endpoints extends React.Component<Props, State> {
         };
     }
 
-
     // Sending request to our backned at the accounts endpoint
     fetchAccounts = () => {
-        fetch('/accounts')
+        fetch('/accounts', { method: 'POST' })
             .then((r) => r.json())
             .then((data) => {
                 this.setState({ accountsData: JSON.stringify(data, null, 2) });
-            })
+            });
     };
 
     // Sending request to our backned at the intervals endpoint
@@ -88,8 +87,6 @@ export class Endpoints extends React.Component<Props, State> {
                 this.setState({ billsData: d });
             });
     };
-
-
 
     // - - - - - - - - - - - - Front-End Rendering Logic - - - - - - - - - - - -
 

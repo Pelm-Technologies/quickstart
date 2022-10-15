@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // Create connect_token
 // API reference: https://docs.pelm.com/reference/post_auth-connect-token
-app.get('/connect-token', (req, res, next) => {
+app.post('/connect-token', (req, res, next) => {
 
   const headers = new Headers();
   headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
@@ -62,7 +62,7 @@ app.get('/connect-token', (req, res, next) => {
 
 // Get accouts
 // API reference: https://docs.pelm.com/reference/get_accounts
-app.get('/accounts', (req, res) => {
+app.post('/accounts', (req, res) => {
 
   const accessToken = req.session.access_token
   const headers = new Headers();

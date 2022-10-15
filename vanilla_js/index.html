@@ -8,7 +8,7 @@
             (async () => {
                 // Create a connect token using client credentials in order to initiate the Connect Flow.
                 const generateConnectToken = () => {
-                    return fetch('/connect-token')
+                    return fetch('/connect-token', { method: 'POST' })
                         .then((r) => {
                             if (r.ok) {
                                 return r.json();
@@ -32,7 +32,7 @@
 
                 // Sending request to our backned at the accounts endpoint.
                 const generateAccounts = async () => {
-                    const accounts = await fetch('/accounts')
+                    const accounts = await fetch('/accounts', { method: 'POST' })
                         .then((r) => r.json())
                         .then((data) => data);
 
@@ -44,7 +44,6 @@
 
                     // Display accounts recieved
                     document.getElementById('accounts-json').textContent = JSON.stringify(accounts, undefined, 2);
-
                 };
 
                 // Use the authorizationCode to get an access_token.
