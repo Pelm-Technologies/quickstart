@@ -20,7 +20,7 @@ const USER_ID = process.env.USER_ID
 
 
 app.use(
-  // Here we are using session in place of a database
+  // We use session in lieu of a database in this example for convenience.
   // Instead use your own database to store values like the Authorization_Token
   session({ secret: "secret", saveUninitialized: true, resave: true })
 );
@@ -35,8 +35,8 @@ app.get("/", async (req, res) => {
 });
 
 // Create connect_token
-// Link to Pelm docs: https://docs.pelm.com/reference/post_auth-connect-token
-app.get('/connect', (req, res) => {
+// API reference: https://docs.pelm.com/reference/post_auth-connect-token
+app.get('/connect-token', (req, res) => {
 
   const headers = new Headers();
   headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
@@ -52,7 +52,6 @@ app.get('/connect', (req, res) => {
     body: encodedParams,
   };
 
-  // Reach out to the Pelm API connect endpoint providing all the relevent headers
   fetch('https://api.pelm.com/auth/connect-token', requestOptions)
     .then(response => {
       if (response.ok) {
@@ -67,19 +66,14 @@ app.get('/connect', (req, res) => {
         connectToken: data['connect_token']
       }))
     })
-    .catch((error) => {
-      try {
-        const errorObject = JSON.parse(error.message);
-        console.log(errorObject)
-      } catch (e) {
-        console.log("an error occurred")
-      }
+    .catch((err) => {
+      res.status(500).send(JSON.parse(err.message).message)
     });
 })
 
 
 // Get energy_accouts
-// Link to Pelm docs: https://docs.pelm.com/reference/get_accounts
+// API reference: https://docs.pelm.com/reference/get_accounts
 app.get('/accounts', (req, res) => {
 
   const accessToken = req.session.access_token
@@ -94,7 +88,6 @@ app.get('/accounts', (req, res) => {
     headers,
   };
 
-  // Reach out to the Pelm API accounts endpoint providing all the relevent headers
   fetch('https://api.pelm.com/accounts', requestOptions)
     .then((response) => {
       if (response.ok) {
@@ -110,18 +103,13 @@ app.get('/accounts', (req, res) => {
       res.end(JSON.stringify(data))
     })
     .catch((error) => {
-      try {
-        const errorObject = JSON.parse(error.message);
-        console.log(errorObject);
-      } catch (e) {
-        console.log('an error occurred');
-      }
+      res.status(500).send(JSON.parse(err.message).message)
     });
 })
 
 
 // Get energy usage intervals
-// Link to Pelm docs: https://docs.pelm.com/reference/get_intervals
+// API reference: https://docs.pelm.com/reference/get_intervals
 //
 // Not currently being utilized in this example implementation
 // Look at our React implementation for more information
@@ -147,8 +135,6 @@ app.post('/intervals', (req, res) => {
       end_date: req.body.intervalsEndDate,
     });
 
-  // Reach out to the Pelm API intervals endpoint providing all the relevent headers
-
   fetch(url, requestOptions)
     .then((response) => {
       if (response.ok) {
@@ -164,19 +150,14 @@ app.post('/intervals', (req, res) => {
       res.end(JSON.stringify(data));
     })
     .catch((error) => {
-      try {
-        const errorObject = JSON.parse(error.message);
-        console.log(errorObject);
-      } catch (e) {
-        console.log('an error occurred');
-      }
+      res.status(500).send(JSON.parse(err.message).message)
     });
 
 })
 
 
 // Get Bills
-// Link to Pelm docs: https://docs.pelm.com/reference/get_bills
+// API reference: https://docs.pelm.com/reference/get_bills
 //
 // Not currently being utilized in this example implementation
 // Look at our React implementation for more information
@@ -195,7 +176,6 @@ app.post('/bills', (req, res) => {
 
   const url = 'https://api.pelm.com/bills?account_id=' + req.body.billsAccountIdInput;
 
-  // Reach out to the Pelm API bills endpoint providing all the relevent headers
   fetch(url, requestOptions)
     .then((response) => {
       if (response.ok) {
@@ -211,18 +191,13 @@ app.post('/bills', (req, res) => {
       res.end(JSON.stringify(data));
     })
     .catch((error) => {
-      try {
-        const errorObject = JSON.parse(error.message);
-        console.log(errorObject);
-      } catch (e) {
-        console.log('an error occurred');
-      }
+      res.status(500).send(JSON.parse(err.message).message)
     });
 })
 
 
 // Create access_token
-// Link to Pelm docs: https://docs.pelm.com/reference/post_auth-token-1
+// API reference: https://docs.pelm.com/reference/post_auth-token-1
 app.post('/authorization', async (req, res) => {
 
   const headers = new Headers();
@@ -238,7 +213,6 @@ app.post('/authorization', async (req, res) => {
     body: encodedParams,
   };
 
-  // Reach out to the Pelm API authorization endpoint providing all the relevent headers
   await fetch('https://api.pelm.com/auth/token', requestOptions)
     .then((response) => {
       if (response.ok) {
@@ -250,22 +224,13 @@ app.post('/authorization', async (req, res) => {
       }
     })
     .then(data => {
-      // Save the access_token to your db
+      // We recommend securely saving your access_token to your database. We're saving to session here for convenience.
       req.session.access_token = data.access_token
       // Use the access_token to make requests for a given user's energy data
       res.json(true)
     })
     .catch((error) => {
-      try {
-        const errorObject = JSON.parse(error.message);
-        console.log(errorObject);
-        res.status(500)
-        res.json(false)
-      } catch (e) {
-        console.log('an error occurred');
-        res.json(false)
-      }
-
+      res.status(500).send(JSON.parse(err.message).message)
     });
 })
 

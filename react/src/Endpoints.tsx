@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 type Props = {
-    accessed: boolean;
+    error: string | undefined;
 };
 
 type State = {
@@ -49,7 +49,7 @@ export class Endpoints extends React.Component<Props, State> {
             .then((r) => r.json())
             .then((data) => {
                 this.setState({ accountsData: JSON.stringify(data, null, 2) });
-            });
+            })
     };
 
     // Sending request to our backned at the intervals endpoint

@@ -8,19 +8,33 @@
             (async () => {
                 // Create a connect token using client credentials in order to initiate the Connect Flow.
                 const generateConnectToken = () => {
-                    return fetch('/connect')
-                        .then((r) => r.json())
+                    return fetch('/connect-token')
+                        .then((r) => {
+                            if (r.ok) {
+                                return r.json();
+                            } else {
+                                return r.text().then((t) => {
+                                    throw new Error(t);
+                                });
+                            }
+                        })
                         .then((d) => {
+                            const errorText = document.getElementById('error-text');
+                            errorText.hidden = true;
                             return d.connectToken;
+                        })
+                        .catch((e) => {
+                            const errorText = document.getElementById('error-text');
+                            errorText.hidden = false;
+                            errorText.innerText = e;
                         });
                 };
 
-                // Sending request to our backned at the accounts endpoint
+                // Sending request to our backned at the accounts endpoint.
                 const generateAccounts = async () => {
-
                     const accounts = await fetch('/accounts')
                         .then((r) => r.json())
-                        .then((data) => JSON.stringify(data, null, 2));
+                        .then((data) => data);
 
                     const gettingAccounts = document.getElementById('getting-accounts');
                     gettingAccounts.hidden = true;
@@ -29,17 +43,11 @@
                     gotAccounts.hidden = false;
 
                     // Display accounts recieved
-                    const accountsList = document.getElementById('accounts-list');
-                    JSON.parse(accounts).map((account) => {
-                        let pre = document.createElement('pre');
+                    document.getElementById('accounts-json').textContent = JSON.stringify(accounts, undefined, 2);
 
-                        pre.innerHTML = JSON.stringify(account);
-
-                        accountsList.appendChild(pre);
-                    });
                 };
 
-                // Use the authorizationCode to get an access_token and refresh_token.
+                // Use the authorizationCode to get an access_token.
                 const generateAccessToken = (authorizationCode) => {
                     const res = fetch('/authorization', {
                         method: 'POST',
@@ -50,16 +58,15 @@
                     })
                         .then((r) => r.json())
                         .then(() => {
-                            if (res) {
-                                const authTokenSuccess = document.getElementById('auth-token-success');
-                                authTokenSuccess.hidden = false;
-                                const gettingAccounts = document.getElementById('getting-accounts');
-                                gettingAccounts.hidden = false;
-                                generateAccounts();
-                            } else {
-                                const authTokenFailure = document.getElementById('auth-token-failure');
-                                authTokenFailure.hidden = false;
-                            }
+                            const authTokenSuccess = document.getElementById('auth-token-success');
+                            authTokenSuccess.hidden = false;
+                            const gettingAccounts = document.getElementById('getting-accounts');
+                            gettingAccounts.hidden = false;
+                            generateAccounts();
+                        })
+                        .catch((e) => {
+                            const authTokenFailure = document.getElementById('auth-token-failure');
+                            authTokenFailure.hidden = false;
                         });
                 };
 
@@ -70,8 +77,13 @@
                 };
 
                 // This is the callback that is called when Connect is exited but the user has not successfully connected their utility account.
-                const onExit = (status, metadata) => {
-                    console.log(`onExit called with status ${status} and metadata ${metadata}`);
+                onExit = (status, metadata) => {
+                    const log = `onExit called with arguments:
+                        {
+                            'status': ${status}
+                            'metadata': ${JSON.stringify(metadata)}
+                        }`;
+                    console.log(log);
                 };
 
                 // The config is used to specify your Connect Token and callbacks for the success and exit cases.
@@ -93,12 +105,13 @@
     <body>
         <h1>Pelm Connect Javascript Demo</h1>
         <button id="connect-utility-button" disabled>Connect utility</button>
+        <h2 id="error-text" hidden></h2>
         <h2 id="auth-token-success" hidden>Auth Token Successfully Saved To Database</h2>
         <h2 id="auth-token-failure" hidden>Auth Token Failed To Saved To Database</h2>
         <h2 id="getting-accounts" hidden>Fetching user Accounts...</h2>
         <h3 id="got-accounts" hidden>
             Here are user accounts you can find when using the "https://api.pelm.com/accounts" endpoint:
         </h3>
-        <ul id="accounts-list"></ul>
+        <pre id="accounts-json"></pre>
     </body>
 </html>
