@@ -32,7 +32,6 @@ app.post('/connect-token', (req, res, next) => {
   headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
   headers.set('Pelm-Secret', PELM_SECRET);
 
-
   const encodedParams = new URLSearchParams();
 
   encodedParams.set('user_id', USER_ID);
@@ -182,7 +181,7 @@ app.post('/bills', (req, res) => {
 app.post('/authorization', async (req, res) => {
 
   const headers = new Headers();
-  headers.set('Pelm-Client-Id', '');
+  headers.set('Pelm-Client-Id', PELM_CLIENT_ID);
   headers.set('Pelm-Secret', PELM_SECRET);
 
   const encodedParams = new URLSearchParams();

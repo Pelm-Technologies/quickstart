@@ -100,7 +100,7 @@ export class Endpoints extends React.Component<Props, State> {
         return (
             <div>
                 This is the response:
-                <div>
+                <div style={{border: '1px solid black', maxHeight: "500px", overflowY: 'scroll' }}>
                     <pre>{data}</pre>
                 </div>
             </div>
@@ -137,7 +137,7 @@ export class Endpoints extends React.Component<Props, State> {
                 <button onClick={clearIntervalData}>Clear</button>
                 <div>
                     This is the response:
-                    <div>
+                    <div style={{ border: '1px solid black', maxHeight: "500px", overflowY: 'scroll'  }}>
                         <pre>{JSON.stringify(this.state.intervalData, null, 2)}</pre>
                     </div>
                 </div>
@@ -159,7 +159,7 @@ export class Endpoints extends React.Component<Props, State> {
                 <button onClick={clearBillsData}>Clear</button>
                 <div>
                     This is the response:
-                    <div>
+                    <div style={{ border: '1px solid black', maxHeight: "500px", overflowY: 'scroll' }}>
                         <pre>{JSON.stringify(this.state.billsData, null, 2)}</pre>
                     </div>
                 </div>

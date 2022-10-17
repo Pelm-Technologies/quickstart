@@ -46,6 +46,7 @@ export class App extends React.Component<{}, State> {
                 this.setState({ connectToken: d.connect_token });
             })
             .catch((e) => {
+                console.log('1', e)
                 this.setState({ error: e });
             });
     }
@@ -67,6 +68,7 @@ export class App extends React.Component<{}, State> {
                 this.setState({ has_access_token: true });
             })
             .catch((e) => {
+                console.log('2', e)
                 this.setState({ error: e });
             });
     }
