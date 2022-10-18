@@ -256,7 +256,7 @@ export class Endpoints extends React.Component<Props, State> {
         return (
             <div>
                 <div>
-                    Click this button to make a GET request to <code>/accounts/:account_id/bills</code>
+                    Click this button to make a GET request to <code>/bills</code>
                 </div>
                 <input
                     id="accountId"
@@ -294,6 +294,11 @@ export class Endpoints extends React.Component<Props, State> {
                     <br />
                     {this.renderAccountBillsEndpoint()}
                     <br />
+                    <div style={{ marginTop: "20px" }}>
+                        <span>
+                            View our other endpoint at our <a href="https://docs.pelm.com/reference/welcome" target={'_blank'}>Pelm Docs</a>
+                        </span>
+                    </div>
                 </Container>
             </Outer>
         );

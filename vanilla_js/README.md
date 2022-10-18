@@ -1,3 +1,5 @@
+## 0. Make sure you are in the quickstart/vanilla_js folder
+
 ## 1. Install Dependencies
 
 Install dependencies
@@ -6,6 +8,11 @@ Install dependencies
   ```
 
 ## 2. Create a .env file and fill out your environment variables
+
+Create new .env file:
+  ```bash
+  cp .env.example .env
+  ```
 
 `Pelm-Client-Id` and `Pelm-Secret` are given to you when you registered.
 

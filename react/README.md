@@ -1,3 +1,5 @@
+## 0. Make sure you are in the quickstart/react folder
+
 ## 1. Install Dependencies
 
 Install dependencies
@@ -6,6 +8,11 @@ Install dependencies
   ```
 
 ## 2. Create a .env file and fill out your environment variables
+
+Create new .env file:
+  ```bash
+  cp .env.example .env
+  ```
 
 `Pelm-Client-Id` and `Pelm-Secret` are given to you when you registered.
 
@@ -18,7 +25,7 @@ From the /quickstart/react folder, run:
   ```
 
 ## 4. Run the Quickstart
-  From the /quickstart/react folder, run:
+  Open new terminal tab and from the /quickstart/react folder, run:
   ```bash
   npm start
   ```
