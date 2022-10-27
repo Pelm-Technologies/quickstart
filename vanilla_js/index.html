@@ -3,9 +3,25 @@
     <head>
         <meta charset="utf-8" />
         <title>Pelm Connect Javascript Demo</title>
+        
+    </head>
+    <body>
+        <h1>Pelm Connect Javascript Demo</h1>
+        <button id="connect-utility-button">Connect utility</button>
+        <h2 id="error-text" hidden></h2>
+        <h2 id="auth-token-success" hidden>Auth Token Successfully Saved To Database</h2>
+        <h2 id="auth-token-failure" hidden>Auth Token Failed To Saved To Database</h2>
+        <h2 id="getting-accounts" hidden>Fetching user Accounts...</h2>
+        <h3 id="got-accounts" hidden>
+            Here are user accounts you can find when using the "https://api.pelm.com/accounts" endpoint:
+        </h3>
+        <pre id="accounts-json"></pre>
         <script src="https://cdn.pelm.com/initialize.js"></script>
         <script defer>
             (async () => {
+                const connectUtilityButton = document.getElementById('connect-utility-button');
+                connectUtilityButton.disabled = true;
+
                 // Create a connect token using client credentials in order to initiate the Connect Flow.
                 const generateConnectToken = () => {
                     return fetch('/connect-token', { method: 'POST' })
@@ -75,6 +91,11 @@
                     generateAccessToken(authorizationCode);
                 };
 
+                // Called when iFrame is ready
+                const onReady = () => {
+                    connectUtilityButton.disabled = false;
+                }
+
                 // This is the callback that is called when Connect is exited but the user has not successfully connected their utility account.
                 onExit = (status, metadata) => {
                     const log = `onExit called with arguments:
@@ -89,28 +110,18 @@
                 const config = {
                     connectToken,
                     onSuccess,
-                    onExit,
+                    onExit
                 };
-                const handler = window.PelmConnect.create(config);
 
-                const connectUtilityButton = document.getElementById('connect-utility-button');
-                connectUtilityButton.disabled = false;
+                window.PelmConnect.initialize({
+                    ...config,
+                    onReady
+                });
+                
                 connectUtilityButton.addEventListener('click', (event) => {
-                    handler.open();
+                    window.PelmConnect.open(config);
                 });
             })();
         </script>
-    </head>
-    <body>
-        <h1>Pelm Connect Javascript Demo</h1>
-        <button id="connect-utility-button" disabled>Connect utility</button>
-        <h2 id="error-text" hidden></h2>
-        <h2 id="auth-token-success" hidden>Auth Token Successfully Saved To Database</h2>
-        <h2 id="auth-token-failure" hidden>Auth Token Failed To Saved To Database</h2>
-        <h2 id="getting-accounts" hidden>Fetching user Accounts...</h2>
-        <h3 id="got-accounts" hidden>
-            Here are user accounts you can find when using the "https://api.pelm.com/accounts" endpoint:
-        </h3>
-        <pre id="accounts-json"></pre>
     </body>
 </html>
