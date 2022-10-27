@@ -22,8 +22,6 @@
             const createConnectToken = async () => {
                 const response = await fetch('/connect-token', { method: 'POST' });
                 const data = await response.json();
-                // const errorText = document.getElementById('error-text');
-
                 if (response.ok) {
                     errorText.hidden = true;
                     return data['connect_token']
@@ -49,7 +47,7 @@
                     authorizationSuccessMessage.hidden = false;
                     const fetchingAccountsMessage = document.getElementById('fetching-accounts-message');
                     fetchingAccountsMessage.hidden = false;
-                    generateAccounts();
+                    fetchAccounts();
                 } else {
                     errorText.innerText = `Error while creating access_token: ${JSON.stringify(data)}`
                     errorText.hidden = false
@@ -57,8 +55,8 @@
             };
 
             // Sending request to our backend at the accounts endpoint.
-            const generateAccounts = async () => {
-                const response = await fetch('/accounts', { method: 'GET' })
+            const fetchAccounts = async () => {
+                const response = await fetch('/accounts', { method: 'POST' })
                 const data = await response.json()
                 if (response.ok) {
                     const gettingAccounts = document.getElementById('fetching-accounts-message');

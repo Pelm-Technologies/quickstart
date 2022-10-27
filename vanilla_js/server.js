@@ -84,7 +84,7 @@ app.post('/authorization', async (req, res) => {
 
 // Get Accounts
 // API reference: https://docs.pelm.com/reference/get_accounts
-app.get('/accounts', async (req, res) => {
+app.post('/accounts', async (req, res) => {
   const accessToken = req.session.access_token
   const headers = new Headers(baseHeaders);
   headers.set('Authorization', 'Bearer ' + accessToken);

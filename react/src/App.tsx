@@ -5,10 +5,9 @@ import { Endpoints } from './Endpoints';
 import { ConnectButton, Config } from 'react-pelm-connect';
 
 type State = {
-    isLoading: boolean;
     error?: string;
     connectToken?: string;
-    has_access_token: boolean;
+    hasAccessToken: boolean;
 };
 
 export class App extends React.Component<{}, State> {
@@ -16,10 +15,10 @@ export class App extends React.Component<{}, State> {
         super(props);
 
         this.state = {
-            isLoading: true,
             error: props.error,
             connectToken: undefined,
-            has_access_token: false,
+            hasAccessToken: false,
+            // hasAccessToken: true,
         };
     }
 
@@ -29,48 +28,34 @@ export class App extends React.Component<{}, State> {
 
     // Create a connect token using client credentials in order to initiate the Connect Flow.
     async generateConnectToken() {
-        this.setState({ isLoading: true });
-
-        await fetch('/connect-token', { method: 'POST' })
-            .then(async (r) => {
-                if (r.ok) {
-                    return r.json();
-                } else {
-                    return r.text().then((t) => {
-                        throw new Error(t);
-                    });
-                }
+        const response = await fetch('/connect-token', { method: 'POST' });
+        const data = await response.json();
+        if (response.ok) {
+            this.setState({ connectToken: data['connect_token'] })
+        } else {
+            this.setState({
+                error: `Error while creating connect_token: ${JSON.stringify(data)}`
             })
-            .then((d) => {
-                this.setState({ isLoading: false });
-                this.setState({ connectToken: d.connect_token });
-            })
-            .catch((e) => {
-                console.log('1', e);
-                this.setState({ error: e });
-            });
+        }
     }
 
     // Use the authorizationCode to get an access_token.
-    generateAccessToken(authorizationCode: string) {
-        this.setState({ isLoading: true });
-
-        fetch('/authorization', {
+    async generateAccessToken(authorizationCode: string) {
+        const response = await fetch('/authorization', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ authorizationCode }),
+            body: JSON.stringify({ authorization_code: authorizationCode }),
         })
-            .then((r) => r.json())
-            .then((d) => {
-                this.setState({ isLoading: false });
-                this.setState({ has_access_token: true });
+        const data = await response.json()
+        if (response.ok) {
+            this.setState({ hasAccessToken: true })
+        } else {
+            this.setState({
+                error: `Error while creating access_token: ${JSON.stringify(data)}`
             })
-            .catch((e) => {
-                console.log('2', e);
-                this.setState({ error: e });
-            });
+        }
     }
 
     // This is the callback that is called when your User successfully connects their utility account.
@@ -89,13 +74,9 @@ export class App extends React.Component<{}, State> {
     };
 
     render(): React.ReactNode {
-        if (this.state.isLoading && !this.state.error) {
-            return 'Loading';
-        }
-
-        if (this.state.error) {
-            return `${this.state.error}`;
-        }
+        const error = this.state.error
+            ? <div><br/>{this.state.error}</div>
+            : null;
 
         // The config is used to specify your Connect Token and callbacks for the success and exit cases.
         const config: Config = {
@@ -104,12 +85,13 @@ export class App extends React.Component<{}, State> {
             onExit: this.onExit,
         };
 
-        return this.state.has_access_token ? (
+        return this.state.hasAccessToken ? (
             <Endpoints error={this.state.error} />
         ) : (
             <>
-                <h1>Pelm Connect Javascript Demo</h1>
+                <h1>Pelm Connect React Demo</h1>
                 <ConnectButton config={config} />
+                {error}
             </>
         );
     }

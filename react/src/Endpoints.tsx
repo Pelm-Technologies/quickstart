@@ -6,15 +6,14 @@ type Props = {
 };
 
 type State = {
-    accountsData?: string;
-    intervalData?: any;
-    billsData?: any;
+    accountsResponse?: string;
+    intervalsResponse?: any;
+    billsResponse?: any;
     intervalsAccountIdInput: string;
     intervalsStartDate: string;
     intervalsEndDate: string;
     intervalsType: string;
     billsAccountIdInput: string;
-    billIdInput: string;
 };
 
 const Outer = styled.div`
@@ -30,30 +29,32 @@ export class Endpoints extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            accountsData: undefined,
-            intervalData: undefined,
-            billsData: undefined,
+            accountsResponse: undefined,
+            intervalsResponse: undefined,
+            billsResponse: undefined,
             intervalsAccountIdInput: '',
             intervalsStartDate: '',
             intervalsEndDate: '',
             intervalsType: 'ELECTRIC',
             billsAccountIdInput: '',
-            billIdInput: '',
         };
     }
 
-    // Sending request to our backned at the accounts endpoint
-    fetchAccounts = () => {
-        fetch('/accounts', { method: 'POST' })
-            .then((r) => r.json())
-            .then((data) => {
-                this.setState({ accountsData: JSON.stringify(data, null, 2) });
-            });
+    // Fetch Accounts from server
+    fetchAccounts = async () => {
+        const response = await fetch('/accounts', { method: 'POST' })
+        const data = await response.json()
+        this.setState({ accountsResponse: JSON.stringify(data, null, 2) })
+        // fetch('/accounts', { method: 'GET' })
+        //     .then((r) => r.json())
+        //     .then((data) => {
+        //         this.setState({ accountsResponse: JSON.stringify(data, null, 2) });
+        //     });
     };
 
-    // Sending request to our backned at the intervals endpoint
-    fetchIntervals = () => {
-        fetch('/intervals', {
+    // Fetch Intervals from server
+    fetchIntervals = async () => {
+        const response = await fetch('/intervals', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -65,15 +66,18 @@ export class Endpoints extends React.Component<Props, State> {
                 intervalsEndDate: this.state.intervalsEndDate,
             }),
         })
-            .then((r) => r.json())
-            .then((d) => {
-                this.setState({ intervalData: d });
-            });
+        const data = await response.json()
+        this.setState({ intervalsResponse: JSON.stringify(data, null, 2) })
+
+            // .then((r) => r.json())
+            // .then((d) => {
+            //     this.setState({ intervalsResponse: d });
+            // });
     };
 
-    // Sending request to our backned at the bills endpoint
-    fetchBills = () => {
-        fetch('/bills', {
+    // Fetch Bills from server
+    fetchBills = async () => {
+        const response = await fetch('/bills', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -82,34 +86,21 @@ export class Endpoints extends React.Component<Props, State> {
                 billsAccountIdInput: this.state.billsAccountIdInput,
             }),
         })
-            .then((r) => r.json())
-            .then((d) => {
-                this.setState({ billsData: d });
-            });
+        const data = await response.json()
+        this.setState({ billsResponse: JSON.stringify(data, null, 2) })
+
+            // .then((r) => r.json())
+            // .then((d) => {
+            //     this.setState({ billsResponse: d });
+            // });
     };
 
-    // - - - - - - - - - - - - Front-End Rendering Logic - - - - - - - - - - - -
+    // - - - - - - - - - - - - Rendering Logic - - - - - - - - - - - -
 
-    maybeRenderAccountsResponse() {
-        if (this.state.accountsData === undefined) {
-            return null;
-        }
-
-        const data = this.state.accountsData;
-
-        return (
-            <div>
-                This is the response:
-                <div style={{border: '1px solid black', maxHeight: "500px", overflowY: 'scroll' }}>
-                    <pre>{data}</pre>
-                </div>
-            </div>
-        );
-    }
-
+    // Accounts
     renderAccountsEndpoint() {
-        const clearAcountsData = () => {
-            this.setState({ accountsData: undefined });
+        const clearAccountsData = () => {
+            this.setState({ accountsResponse: undefined });
         };
         return (
             <div>
@@ -117,92 +108,27 @@ export class Endpoints extends React.Component<Props, State> {
                     Click this button to make a GET request to <code>/accounts</code>
                 </div>
                 <button onClick={this.fetchAccounts}>Submit</button>
-                {this.state.accountsData && <button onClick={clearAcountsData}>Clear Data</button>}
+                {this.state.accountsResponse && <button onClick={clearAccountsData}>Clear Data</button>}
                 {this.maybeRenderAccountsResponse()}
             </div>
         );
     }
 
-    maybeRenderIntervalsResponse() {
-        if (this.state.intervalData === undefined) {
+    maybeRenderAccountsResponse() {
+        if (this.state.accountsResponse === undefined) {
             return null;
         }
-
-        const clearIntervalData = () => {
-            this.setState({ intervalData: undefined });
-        };
-
         return (
-            <>
-                <button onClick={clearIntervalData}>Clear</button>
-                <div>
-                    This is the response:
-                    <div style={{ border: '1px solid black', maxHeight: "500px", overflowY: 'scroll'  }}>
-                        <pre>{JSON.stringify(this.state.intervalData, null, 2)}</pre>
-                    </div>
+            <div>
+                This is the response:
+                <div style={{border: '1px solid black', maxHeight: "500px", overflowY: 'scroll' }}>
+                    <pre>{this.state.accountsResponse}</pre>
                 </div>
-            </>
+            </div>
         );
     }
 
-    maybeRenderAccountBillsResponse() {
-        if (this.state.billsData === undefined) {
-            return null;
-        }
-
-        const clearBillsData = () => {
-            this.setState({ billsData: undefined });
-        };
-
-        return (
-            <>
-                <button onClick={clearBillsData}>Clear</button>
-                <div>
-                    This is the response:
-                    <div style={{ border: '1px solid black', maxHeight: "500px", overflowY: 'scroll' }}>
-                        <pre>{JSON.stringify(this.state.billsData, null, 2)}</pre>
-                    </div>
-                </div>
-            </>
-        );
-    }
-
-    onIntervalsInputChange = (event: { target: any }) => {
-        const target = event.target;
-        const value = target.value;
-
-        this.setState({
-            intervalsAccountIdInput: value,
-        });
-    };
-
-    onIntervalsStartDateChange = (event: { target: any }) => {
-        const target = event.target;
-        const value = target.value;
-
-        this.setState({
-            intervalsStartDate: value,
-        });
-    };
-
-    onIntervalsEndDateChange = (event: { target: any }) => {
-        const target = event.target;
-        const value = target.value;
-
-        this.setState({
-            intervalsEndDate: value,
-        });
-    };
-
-    onIntervalsTypeChange = (event: { target: any }) => {
-        const target = event.target;
-        const value = target.value;
-
-        this.setState({
-            intervalsType: value,
-        });
-    };
-
+    // Intervals
     renderIntervalsEndpoints() {
         return (
             <div>
@@ -243,15 +169,65 @@ export class Endpoints extends React.Component<Props, State> {
         );
     }
 
-    onBillsInputChange = (event: { target: any }) => {
+    onIntervalsInputChange = (event: { target: any }) => {
         const target = event.target;
         const value = target.value;
 
         this.setState({
-            billsAccountIdInput: value,
+            intervalsAccountIdInput: value,
         });
     };
 
+    onIntervalsStartDateChange = (event: { target: any }) => {
+        const target = event.target;
+        const value = target.value;
+
+        this.setState({
+            intervalsStartDate: value,
+        });
+    };
+
+    onIntervalsEndDateChange = (event: { target: any }) => {
+        const target = event.target;
+        const value = target.value;
+
+        this.setState({
+            intervalsEndDate: value,
+        });
+    };
+
+    onIntervalsTypeChange = (event: { target: any }) => {
+        const target = event.target;
+        const value = target.value;
+
+        this.setState({
+            intervalsType: value,
+        });
+    };
+
+    maybeRenderIntervalsResponse() {
+        if (this.state.intervalsResponse === undefined) {
+            return null;
+        }
+
+        const clearIntervalsData = () => {
+            this.setState({ intervalsResponse: undefined });
+        };
+
+        return (
+            <>
+                <button onClick={clearIntervalsData}>Clear</button>
+                <div>
+                    This is the response:
+                    <div style={{ border: '1px solid black', maxHeight: "500px", overflowY: 'scroll'  }}>
+                        <pre>{this.state.intervalsResponse}</pre>
+                    </div>
+                </div>
+            </>
+        );
+    }
+
+    // Bills
     renderAccountBillsEndpoint() {
         return (
             <div>
@@ -272,14 +248,36 @@ export class Endpoints extends React.Component<Props, State> {
         );
     }
 
-    onBillIdInputChange = (event: { target: any }) => {
+    onBillsInputChange = (event: { target: any }) => {
         const target = event.target;
         const value = target.value;
 
         this.setState({
-            billIdInput: value,
+            billsAccountIdInput: value,
         });
     };
+
+    maybeRenderAccountBillsResponse() {
+        if (this.state.billsResponse === undefined) {
+            return null;
+        }
+
+        const clearBillsData = () => {
+            this.setState({ billsResponse: undefined });
+        };
+
+        return (
+            <>
+                <button onClick={clearBillsData}>Clear</button>
+                <div>
+                    This is the response:
+                    <div style={{ border: '1px solid black', maxHeight: "500px", overflowY: 'scroll' }}>
+                        <pre>{this.state.billsResponse}</pre>
+                    </div>
+                </div>
+            </>
+        );
+    }
 
     render() {
         return (
