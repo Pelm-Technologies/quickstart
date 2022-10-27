@@ -8,9 +8,9 @@
     <body>
         <h1>Pelm Connect Javascript Demo</h1>
         <button id="connect-utility-button">Connect utility</button>
-        <h2 id="error-text" hidden></h2>
-        <h2 id="auth-token-success" hidden>Auth Token Successfully Saved To Database</h2>
-        <h2 id="auth-token-failure" hidden>Auth Token Failed To Saved To Database</h2>
+        <!-- <h2 id="error-heading" hidden></h2> -->
+        <p id="error-text" hidden></p>
+        <h2 id="auth-token-success" hidden>Authorization successful</h2>
         <h2 id="getting-accounts" hidden>Fetching user Accounts...</h2>
         <h3 id="got-accounts" hidden>
             Here are user accounts you can find when using the "https://api.pelm.com/accounts" endpoint:
@@ -19,31 +19,68 @@
         <script src="https://cdn.pelm.com/initialize.js"></script>
         <script defer>
             (async () => {
+                const errorText = document.getElementById('error-text');
+
                 const connectUtilityButton = document.getElementById('connect-utility-button');
                 connectUtilityButton.disabled = true;
 
                 // Create a connect token using client credentials in order to initiate the Connect Flow.
-                const generateConnectToken = () => {
-                    return fetch('/connect-token', { method: 'POST' })
-                        .then((r) => {
-                            if (r.ok) {
-                                return r.json();
-                            } else {
-                                return r.text().then((t) => {
-                                    throw new Error(t);
-                                });
-                            }
-                        })
-                        .then((d) => {
-                            const errorText = document.getElementById('error-text');
-                            errorText.hidden = true;
-                            return d.connectToken;
-                        })
-                        .catch((e) => {
-                            const errorText = document.getElementById('error-text');
-                            errorText.hidden = false;
-                            errorText.innerText = e;
-                        });
+                const generateConnectToken = async () => {
+                    const response = await fetch('/connect-token', { method: 'POST' });
+                    const data = await response.json();
+                    // const errorText = document.getElementById('error-text');
+
+                    if (response.ok) {
+                        errorText.hidden = true;
+                        return data['connect_token']
+                    } else {
+                        errorText.innerText = `Error while creating connect_token: ${JSON.stringify(data)}`
+                        errorText.hidden = false;
+                    }
+                };
+
+                // Use the authorizationCode to get an access_token.
+                const generateAccessToken = async (authorizationCode) => {
+                    const response = await fetch('/authorization', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ authorizationCode }),
+                        // body: JSON.stringify({ 'authorization_code': '123123' }),
+                    })
+                    const data = await response.json()
+                    if (response.ok) {
+                        errorText.hidden = true;
+                        const authTokenSuccess = document.getElementById('auth-token-success');
+                        authTokenSuccess.hidden = false;
+                        const gettingAccounts = document.getElementById('getting-accounts');
+                        gettingAccounts.hidden = false;
+                        generateAccounts();
+                    } else {
+                        errorText.innerText = `Error while creating access_token: ${JSON.stringify(data)}`
+                        errorText.hidden = false
+                    }
+
+                    // const res = fetch('/authorization', {
+                    //     method: 'POST',
+                    //     headers: {
+                    //         'Content-Type': 'application/json',
+                    //     },
+                    //     body: JSON.stringify({ authorizationCode }),
+                    // })
+                    //     .then((r) => r.json())
+                    //     .then(() => {
+                    //         const authTokenSuccess = document.getElementById('auth-token-success');
+                    //         authTokenSuccess.hidden = false;
+                    //         const gettingAccounts = document.getElementById('getting-accounts');
+                    //         gettingAccounts.hidden = false;
+                    //         generateAccounts();
+                    //     })
+                    //     .catch((e) => {
+                    //         const authTokenFailure = document.getElementById('auth-token-failure');
+                    //         authTokenFailure.hidden = false;
+                    //     });
                 };
 
                 // Sending request to our backned at the accounts endpoint.
@@ -62,28 +99,7 @@
                     document.getElementById('accounts-json').textContent = JSON.stringify(accounts, undefined, 2);
                 };
 
-                // Use the authorizationCode to get an access_token.
-                const generateAccessToken = (authorizationCode) => {
-                    const res = fetch('/authorization', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ authorizationCode }),
-                    })
-                        .then((r) => r.json())
-                        .then(() => {
-                            const authTokenSuccess = document.getElementById('auth-token-success');
-                            authTokenSuccess.hidden = false;
-                            const gettingAccounts = document.getElementById('getting-accounts');
-                            gettingAccounts.hidden = false;
-                            generateAccounts();
-                        })
-                        .catch((e) => {
-                            const authTokenFailure = document.getElementById('auth-token-failure');
-                            authTokenFailure.hidden = false;
-                        });
-                };
+                
 
                 const connectToken = await generateConnectToken();
                 // This is the callback that is called when your User successfully connects their utility account.
