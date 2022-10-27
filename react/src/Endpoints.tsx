@@ -105,7 +105,7 @@ export class Endpoints extends React.Component<Props, State> {
         return (
             <div>
                 <div>
-                    Click this button to make a GET request to <code>/accounts</code>
+                    Click "Submit" to make a request to <code><a href='https://docs.pelm.com/reference/get_accounts' target='_blank'>GET /accounts</a></code>
                 </div>
                 <button onClick={this.fetchAccounts}>Submit</button>
                 {this.state.accountsResponse && <button onClick={clearAccountsData}>Clear Data</button>}
@@ -133,7 +133,7 @@ export class Endpoints extends React.Component<Props, State> {
         return (
             <div>
                 <div>
-                    Click this button to make a GET request to <code>/intervals</code>
+                Click "Submit" to make a request to <code><a href='https://docs.pelm.com/reference/get_intervals' target='_blank'>GET /intervals</a></code>
                 </div>
                 <input
                     id="accountId"
@@ -232,7 +232,7 @@ export class Endpoints extends React.Component<Props, State> {
         return (
             <div>
                 <div>
-                    Click this button to make a GET request to <code>/bills</code>
+                Click "Submit" to make a request to <code><a href='https://docs.pelm.com/reference/get_bills' target='_blank'>GET /bills</a></code>
                 </div>
                 <input
                     id="accountId"
