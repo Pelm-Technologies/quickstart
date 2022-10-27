@@ -18,7 +18,6 @@ export class App extends React.Component<{}, State> {
             error: props.error,
             connectToken: undefined,
             hasAccessToken: false,
-            // hasAccessToken: true,
         };
     }
 

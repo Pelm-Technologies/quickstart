@@ -7,12 +7,6 @@ const app = express()
 const port = 3001
 dotenv.config()
 
-// Enviornment variables stored in the .env file you created
-const PELM_CLIENT_ID = process.env.PELM_CLIENT_ID
-const PELM_SECRET = process.env.PELM_SECRET
-const USER_ID = process.env.USER_ID
-
-
 app.use(
   // We use session in lieu of a database in this example for convenience.
   // Instead use your own database to store values like the Authorization_Token
@@ -30,10 +24,6 @@ const baseHeaders = {
 // Create connect_token
 // API reference: https://docs.pelm.com/reference/post_auth-connect-token
 app.post('/connect-token', async (req, res) => {
-
-  // TODO: remove this
-  // req.session.access_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJhdXRoLXNlcnZlciIsImNyZWF0ZWRfYXQiOjE2NTkzODE0NTguMDE5NzY5MiwidXNlciI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCIsImNsaWVudF9pZCI6IjAwMDAwMDAwLTAwMDAtMDAwMC0wMDAwLTAwMDAwMDAwMDAwMCJ9.mYv4h4e6CNNz8YeDinO6IgmVXwgQ1KIssa5Y3yWq7M2nMAJ\_-ZbRS6QCvFV8glhDYJ_zhlSM54QC9LWgMeRKAqebcj-McyYAxjsZZI6DlWjv-CxIkPnG0lODwOZW_8-IMDZMULyJkBmHDi3UoaCB-qYv0PIR94KbCGOA6ej3Srgy5vRV\_\_S0D-oRYdysYZszuiCf276VGYnIjFyYEYaLptBAYfPYXRfmf3EszBilL7yRGoqil0yUpiEg64tFo8QlSwfDNi7MSpUkgQy6YXxJRSdQIJszqvZjEqMfROBe3ncalOjIX8n8-THGpvIol914Uo9nJxJnYw7FL3syzhXUZQ'
-
   const headers = new Headers(baseHeaders);
   const encodedParams = new URLSearchParams();
   encodedParams.set('user_id', process.env.USER_ID);
@@ -127,25 +117,6 @@ app.post('/intervals', async (req, res) => {
   } else {
     res.status(500).send(data)
   }
-
-  // fetch(url, requestOptions)
-  //   .then((response) => {
-  //     if (response.ok) {
-  //       return response.json();
-  //     } else {
-  //       return response.text().then((text) => {
-  //         throw new Error(text);
-  //       });
-  //     }
-  //   })
-  //   .then((data) => {
-  //     // Return intervals data
-  //     res.end(JSON.stringify(data));
-  //   })
-  //   .catch((err) => {
-  //     res.status(500).send(JSON.parse(err.message).message)
-  //   });
-
 })
 
 
@@ -168,27 +139,9 @@ app.post('/bills', async (req, res) => {
   } else {
     res.status(500).send(data)
   }
-
-  // fetch(url, requestOptions)
-  //   .then((response) => {
-  //     if (response.ok) {
-  //       return response.json();
-  //     } else {
-  //       return response.text().then((text) => {
-  //         throw new Error(text);
-  //       });
-  //     }
-  //   })
-  //   .then((data) => {
-  //     // Return bills data
-  //     res.end(JSON.stringify(data));
-  //   })
-  //   .catch((err) => {
-  //     res.status(500).send(JSON.parse(err.message).message)
-  //   });
 })
 
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Server listening on port ${port}`)
 })

@@ -45,11 +45,6 @@ export class Endpoints extends React.Component<Props, State> {
         const response = await fetch('/accounts', { method: 'POST' })
         const data = await response.json()
         this.setState({ accountsResponse: JSON.stringify(data, null, 2) })
-        // fetch('/accounts', { method: 'GET' })
-        //     .then((r) => r.json())
-        //     .then((data) => {
-        //         this.setState({ accountsResponse: JSON.stringify(data, null, 2) });
-        //     });
     };
 
     // Fetch Intervals from server
@@ -68,11 +63,6 @@ export class Endpoints extends React.Component<Props, State> {
         })
         const data = await response.json()
         this.setState({ intervalsResponse: JSON.stringify(data, null, 2) })
-
-            // .then((r) => r.json())
-            // .then((d) => {
-            //     this.setState({ intervalsResponse: d });
-            // });
     };
 
     // Fetch Bills from server
@@ -88,11 +78,6 @@ export class Endpoints extends React.Component<Props, State> {
         })
         const data = await response.json()
         this.setState({ billsResponse: JSON.stringify(data, null, 2) })
-
-            // .then((r) => r.json())
-            // .then((d) => {
-            //     this.setState({ billsResponse: d });
-            // });
     };
 
     // - - - - - - - - - - - - Rendering Logic - - - - - - - - - - - -
