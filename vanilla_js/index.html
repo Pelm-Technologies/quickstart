@@ -7,7 +7,7 @@
     </head>
     <body>
         <h1>Pelm Connect Javascript Demo</h1>
-        <button id="connect-utility-button" disabled>Connect utility</button>
+        <button id="connect-utility-button">Connect utility</button>
         <h2 id="error-text" hidden></h2>
         <h2 id="auth-token-success" hidden>Auth Token Successfully Saved To Database</h2>
         <h2 id="auth-token-failure" hidden>Auth Token Failed To Saved To Database</h2>
@@ -16,11 +16,12 @@
             Here are user accounts you can find when using the "https://api.pelm.com/accounts" endpoint:
         </h3>
         <pre id="accounts-json"></pre>
-        <!-- <script src="https://cdn.pelm.com/initialize.js"></script> -->
-        <script src="http://localhost:8080/initialize.js"></script>
+        <script src="https://cdn.pelm.com/initialize.js"></script>
+        <!-- <script src="http://localhost:8080/initialize.js"></script> -->
         <script defer>
             (async () => {
                 const connectUtilityButton = document.getElementById('connect-utility-button');
+                connectUtilityButton.disabled = true;
 
                 // Create a connect token using client credentials in order to initiate the Connect Flow.
                 const generateConnectToken = () => {
@@ -115,25 +116,17 @@
                 const config = {
                     connectToken,
                     onSuccess,
-                    onExit,
-                    onReady
+                    onExit
                 };
 
-                window.PelmConnect.create(config);
-
-                
+                window.PelmConnect.initialize({
+                    ...config,
+                    onReady
+                });
                 
                 connectUtilityButton.addEventListener('click', (event) => {
-                    window.PelmConnect.open();
+                    window.PelmConnect.open(config);
                 });
-
-                // const handler = window.PelmConnect.create(config);
-
-                // const connectUtilityButton = document.getElementById('connect-utility-button');
-                // connectUtilityButton.disabled = false;
-                // connectUtilityButton.addEventListener('click', (event) => {
-                //     handler.open();
-                // });
             })();
         </script>
     </body>

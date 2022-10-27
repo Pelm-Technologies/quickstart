@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Pelm-Technologies/quickstart_v2/issues"
   },
-  "homepage": "https://github.com/Pelm-Technologies/quickstart_v2#readme"
+  "homepage": "https://github.com/Pelm-Technologies/quickstart_v2#readme",
+  "dependencies": {
+    "react-pelm-connect": "^1.2.1"
+  }
 }
