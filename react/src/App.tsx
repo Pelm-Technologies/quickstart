@@ -100,10 +100,8 @@ export class App extends React.Component<{}, State> {
         // The config is used to specify your Connect Token and callbacks for the success and exit cases.
         const config: Config = {
             connectToken: this.state.connectToken!,
-            // connectToken: '123',
             onSuccess: this.onSuccess,
             onExit: this.onExit,
-            // environment: 'development'
         };
 
         return this.state.has_access_token ? (
