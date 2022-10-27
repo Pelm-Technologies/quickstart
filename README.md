@@ -1,17 +1,19 @@
-# Pelm quickstart
+# Pelm Quickstart
 
-This repository accompanies Pelm's [**quickstart guide**](https://pelm.readme.io/reference/example-app).
+This repository provides a lightweight, full-stack app using Pelm. Clone this repo to get Pelm running locally ASAP. 
 
-## 1. Configuration and Implementation Choice
+To implement Pelm into an existing app, copy snippets from the example code here or follow along Pelm's [Connect Guide](https://pelm.com/docs/getting-started).
 
-Clone the repository
-
+## 1. Clone the repo
   ```bash
   git clone https://github.com/Pelm-Technologies/quickstart.git
   cd quickstart
   ```
 
-Choose your implementation:
+
+## 2. Choose your implementation
+`cd` into the appropriate directory and follow its *README*.
+
 React:
   ```bash
   cd react
@@ -20,5 +22,3 @@ Vanilla Javascript:
   ```bash
   cd vanilla_js
   ```
-
-## 2. Follow the README.md for the chosen implementation
