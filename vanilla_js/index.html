@@ -3,116 +3,87 @@
     <head>
         <meta charset="utf-8" />
         <title>Pelm Connect Javascript Demo</title>
-        
     </head>
     <body>
         <h1>Pelm Connect Javascript Demo</h1>
-        <button id="connect-utility-button">Connect utility</button>
-        <!-- <h2 id="error-heading" hidden></h2> -->
-        <p id="error-text" hidden></p>
-        <h2 id="auth-token-success" hidden>Authorization successful</h2>
-        <h2 id="getting-accounts" hidden>Fetching user Accounts...</h2>
-        <h3 id="got-accounts" hidden>
-            Here are user accounts you can find when using the "https://api.pelm.com/accounts" endpoint:
+        <button id="connect-utility-button" disable>Connect utility</button>
+        <p id="error-message" hidden></p>
+        <h2 id="authorization-success-message" hidden>Authorization successful</h2>
+        <h2 id="fetching-accounts-message" hidden>Fetching user Accounts...</h2>
+        <h3 id="received-accounts-message" hidden>
+            Here are the <code>Account</code>s returned by <code>GET /accounts</code>:
         </h3>
         <pre id="accounts-json"></pre>
         <script src="https://cdn.pelm.com/initialize.js"></script>
         <script defer>
-            (async () => {
-                const errorText = document.getElementById('error-text');
+            const errorText = document.getElementById('error-message');
 
-                const connectUtilityButton = document.getElementById('connect-utility-button');
-                connectUtilityButton.disabled = true;
+            // Create a connect token using client credentials in order to initiate the Connect Flow.
+            const createConnectToken = async () => {
+                const response = await fetch('/connect-token', { method: 'POST' });
+                const data = await response.json();
+                // const errorText = document.getElementById('error-text');
 
-                // Create a connect token using client credentials in order to initiate the Connect Flow.
-                const generateConnectToken = async () => {
-                    const response = await fetch('/connect-token', { method: 'POST' });
-                    const data = await response.json();
-                    // const errorText = document.getElementById('error-text');
-
-                    if (response.ok) {
-                        errorText.hidden = true;
-                        return data['connect_token']
-                    } else {
-                        errorText.innerText = `Error while creating connect_token: ${JSON.stringify(data)}`
-                        errorText.hidden = false;
-                    }
-                };
-
-                // Use the authorizationCode to get an access_token.
-                const generateAccessToken = async (authorizationCode) => {
-                    const response = await fetch('/authorization', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ authorizationCode }),
-                        // body: JSON.stringify({ 'authorization_code': '123123' }),
-                    })
-                    const data = await response.json()
-                    if (response.ok) {
-                        errorText.hidden = true;
-                        const authTokenSuccess = document.getElementById('auth-token-success');
-                        authTokenSuccess.hidden = false;
-                        const gettingAccounts = document.getElementById('getting-accounts');
-                        gettingAccounts.hidden = false;
-                        generateAccounts();
-                    } else {
-                        errorText.innerText = `Error while creating access_token: ${JSON.stringify(data)}`
-                        errorText.hidden = false
-                    }
-
-                    // const res = fetch('/authorization', {
-                    //     method: 'POST',
-                    //     headers: {
-                    //         'Content-Type': 'application/json',
-                    //     },
-                    //     body: JSON.stringify({ authorizationCode }),
-                    // })
-                    //     .then((r) => r.json())
-                    //     .then(() => {
-                    //         const authTokenSuccess = document.getElementById('auth-token-success');
-                    //         authTokenSuccess.hidden = false;
-                    //         const gettingAccounts = document.getElementById('getting-accounts');
-                    //         gettingAccounts.hidden = false;
-                    //         generateAccounts();
-                    //     })
-                    //     .catch((e) => {
-                    //         const authTokenFailure = document.getElementById('auth-token-failure');
-                    //         authTokenFailure.hidden = false;
-                    //     });
-                };
-
-                // Sending request to our backned at the accounts endpoint.
-                const generateAccounts = async () => {
-                    const accounts = await fetch('/accounts', { method: 'POST' })
-                        .then((r) => r.json())
-                        .then((data) => data);
-
-                    const gettingAccounts = document.getElementById('getting-accounts');
-                    gettingAccounts.hidden = true;
-
-                    const gotAccounts = document.getElementById('got-accounts');
-                    gotAccounts.hidden = false;
-
-                    // Display accounts recieved
-                    document.getElementById('accounts-json').textContent = JSON.stringify(accounts, undefined, 2);
-                };
-
-                
-
-                const connectToken = await generateConnectToken();
-                // This is the callback that is called when your User successfully connects their utility account.
-                const onSuccess = (authorizationCode) => {
-                    generateAccessToken(authorizationCode);
-                };
-
-                // Called when iFrame is ready
-                const onReady = () => {
-                    connectUtilityButton.disabled = false;
+                if (response.ok) {
+                    errorText.hidden = true;
+                    return data['connect_token']
+                } else {
+                    errorText.innerText = `Error while creating connect_token: ${JSON.stringify(data)}`
+                    errorText.hidden = false;
                 }
+            };
 
-                // This is the callback that is called when Connect is exited but the user has not successfully connected their utility account.
+            // Use the authorizationCode to get an access_token.
+            const createAccessToken = async (authorizationCode) => {
+                const response = await fetch('/authorization', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ authorization_code: authorizationCode }),
+                })
+                const data = await response.json()
+                if (response.ok) {
+                    errorText.hidden = true;
+                    const authorizationSuccessMessage = document.getElementById('authorization-success-message');
+                    authorizationSuccessMessage.hidden = false;
+                    const fetchingAccountsMessage = document.getElementById('fetching-accounts-message');
+                    fetchingAccountsMessage.hidden = false;
+                    generateAccounts();
+                } else {
+                    errorText.innerText = `Error while creating access_token: ${JSON.stringify(data)}`
+                    errorText.hidden = false
+                }
+            };
+
+            // Sending request to our backend at the accounts endpoint.
+            const generateAccounts = async () => {
+                const response = await fetch('/accounts', { method: 'GET' })
+                const data = await response.json()
+                if (response.ok) {
+                    const gettingAccounts = document.getElementById('fetching-accounts-message');
+                    gettingAccounts.hidden = true;
+                    const gotAccounts = document.getElementById('received-accounts-message');
+                    gotAccounts.hidden = false;
+                    // Display accounts response
+                    document.getElementById('accounts-json').textContent = JSON.stringify(data, undefined, 2);
+                } else {
+                    errorText.innerText = `Error while fetching Accounts: ${JSON.stringify(data)}`
+                    errorText.hidden = false
+                }
+            };
+
+            // Initialize Connect
+            (async () => {
+                const connectUtilityButton = document.getElementById('connect-utility-button');
+
+                // For initializing Connect
+                const connectToken = await createConnectToken();
+                // Called when your user successfully connects their utility login.
+                const onSuccess = (authorizationCode) => {
+                    createAccessToken(authorizationCode);
+                };
+                // Called when Connect is exited but the user has not successfully connected their utility account.
                 onExit = (status, metadata) => {
                     const log = `onExit called with arguments:
                         {
@@ -122,18 +93,24 @@
                     console.log(log);
                 };
 
-                // The config is used to specify your Connect Token and callbacks for the success and exit cases.
+                // Construct config object
                 const config = {
                     connectToken,
                     onSuccess,
                     onExit
                 };
+                // Called when iFrame is ready
+                const onReady = () => {
+                    connectUtilityButton.disabled = false;
+                }
 
+                // Initialize Connect
                 window.PelmConnect.initialize({
                     ...config,
                     onReady
                 });
                 
+                // Open Connect
                 connectUtilityButton.addEventListener('click', (event) => {
                     window.PelmConnect.open(config);
                 });
