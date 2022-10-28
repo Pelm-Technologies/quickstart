@@ -22,11 +22,11 @@ export class App extends React.Component<{}, State> {
     }
 
     componentDidMount(): void {
-        this.generateConnectToken();
+        this.createConnectToken();
     }
 
     // Create a connect token using client credentials in order to initiate the Connect Flow.
-    async generateConnectToken() {
+    async createConnectToken() {
         const response = await fetch('/connect-token', { method: 'POST' });
         const data = await response.json();
         if (response.ok) {

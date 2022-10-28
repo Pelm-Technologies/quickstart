@@ -90,7 +90,7 @@ export class Endpoints extends React.Component<Props, State> {
         return (
             <div>
                 <div>
-                    Click "Submit" to make a request to <code><a href='https://docs.pelm.com/reference/get_accounts' target='_blank'>GET /accounts</a></code>
+                    Click "Submit" to make a request to <code><a href='https://pelm.com/docs/api-reference/accounts/get-accounts' target='_blank'>GET /accounts</a></code>
                 </div>
                 <button onClick={this.fetchAccounts}>Submit</button>
                 {this.state.accountsResponse && <button onClick={clearAccountsData}>Clear Data</button>}
@@ -118,7 +118,7 @@ export class Endpoints extends React.Component<Props, State> {
         return (
             <div>
                 <div>
-                Click "Submit" to make a request to <code><a href='https://docs.pelm.com/reference/get_intervals' target='_blank'>GET /intervals</a></code>
+                Click "Submit" to make a request to <code><a href='https://pelm.com/docs/api-reference/usage/get-usage-intervals' target='_blank'>GET /intervals</a></code>
                 </div>
                 <input
                     id="accountId"
@@ -279,7 +279,7 @@ export class Endpoints extends React.Component<Props, State> {
                     <br />
                     <div style={{ marginTop: "20px" }}>
                         <span>
-                            View our other endpoint at our <a href="https://docs.pelm.com/reference/welcome" target={'_blank'}>Pelm Docs</a>
+                            View our other endpoints at our <a href="https://pelm.com/docs/api-reference/overview" target={'_blank'}>Docs</a>
                         </span>
                     </div>
                 </Container>

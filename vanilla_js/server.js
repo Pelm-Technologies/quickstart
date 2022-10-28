@@ -34,7 +34,7 @@ const baseHeaders = {
 }
 
 // Create connect_token
-// API reference: https://docs.pelm.com/reference/post_auth-connect-token
+// API reference: https://pelm.com/docs/api-reference/auth/create-connect-token
 app.post('/connect-token', async (req, res) => {
   const headers = new Headers(baseHeaders);
   const encodedParams = new URLSearchParams();
@@ -57,7 +57,7 @@ app.post('/connect-token', async (req, res) => {
 })
 
 // Create access_token
-// API reference: https://docs.pelm.com/reference/post_auth-token-1
+// API reference: https://pelm.com/docs/api-reference/auth/create-access-token
 app.post('/authorization', async (req, res) => {
   const headers = new Headers(baseHeaders);
   const encodedParams = new URLSearchParams();
@@ -83,7 +83,7 @@ app.post('/authorization', async (req, res) => {
 })
 
 // Get Accounts
-// API reference: https://docs.pelm.com/reference/get_accounts
+// API reference: https://pelm.com/docs/api-reference/accounts/get-accounts
 app.post('/accounts', async (req, res) => {
   const accessToken = req.session.access_token
   const headers = new Headers(baseHeaders);

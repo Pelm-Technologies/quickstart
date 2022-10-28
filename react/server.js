@@ -22,7 +22,7 @@ const baseHeaders = {
 }
 
 // Create connect_token
-// API reference: https://docs.pelm.com/reference/post_auth-connect-token
+// API reference: https://pelm.com/docs/api-reference/auth/create-connect-token
 app.post('/connect-token', async (req, res) => {
   const headers = new Headers(baseHeaders);
   const encodedParams = new URLSearchParams();
@@ -45,7 +45,7 @@ app.post('/connect-token', async (req, res) => {
 })
 
 // Create access_token
-// API reference: https://docs.pelm.com/reference/post_auth-token-1
+// API reference: https://pelm.com/docs/api-reference/auth/create-access-token
 app.post('/authorization', async (req, res) => {
   const headers = new Headers(baseHeaders);
   const encodedParams = new URLSearchParams();
@@ -71,7 +71,7 @@ app.post('/authorization', async (req, res) => {
 })
 
 // Get Accounts
-// API reference: https://docs.pelm.com/reference/get_accounts
+// API reference: https://pelm.com/docs/api-reference/accounts/get-accounts
 app.post('/accounts', async (req, res) => {
   const accessToken = req.session.access_token
   const headers = new Headers(baseHeaders);
@@ -92,7 +92,7 @@ app.post('/accounts', async (req, res) => {
 
 
 // Get energy usage intervals
-// API reference: https://docs.pelm.com/reference/get_intervals
+// API reference: https://pelm.com/docs/api-reference/usage/get-usage-intervals
 app.post('/intervals', async (req, res) => {
   const accessToken = req.session.access_token
   const headers = new Headers(baseHeaders);
@@ -121,7 +121,7 @@ app.post('/intervals', async (req, res) => {
 
 
 // Get Bills
-// API reference: https://docs.pelm.com/reference/get_bills
+// API reference: https://pelm.com/docs/api-reference/bills/get-bills
 app.post('/bills', async (req, res) => {
   const accessToken = req.session.access_token
   const headers = new Headers(baseHeaders);
