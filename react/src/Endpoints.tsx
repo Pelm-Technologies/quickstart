@@ -217,7 +217,7 @@ export class Endpoints extends React.Component<Props, State> {
         return (
             <div>
                 <div>
-                Click "Submit" to make a request to <code><a href='https://docs.pelm.com/reference/get_bills' target='_blank'>GET /bills</a></code>
+                Click "Submit" to make a request to <code><a href='https://pelm.com/docs/api-reference/bills/get-bills' target='_blank'>GET /bills</a></code>
                 </div>
                 <input
                     id="accountId"
